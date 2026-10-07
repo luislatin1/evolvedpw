@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Árbol de recetas · Lunar → Rising Dawn</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;700&family=Shippori+Mincho:wght@600;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#EDF0EA;--paper2:#E2E8E1;--card:#F7F9F5;--ink:#1E2B30;--soft:#55666B;--line:#B8C5BA;
+  --jade:#2E7D6B;--jadeD:#1F5A4D;--jadeBg:#D5E8DF;--red:#B23A2E;--redBg:#F2DAD5;--amber:#7A5C0F;--amberBg:#F1E7C6;
+  --serif:"Shippori Mincho","Hiragino Mincho ProN","Noto Serif",Georgia,serif;
+  --sans:"Hanken Grotesk",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --paper:#162026;--paper2:#1D2A31;--card:#1F2D34;--ink:#E7ECE4;--soft:#9FB0B2;--line:#3A4D55;
+  --jade:#63BBA1;--jadeD:#8AD3BD;--jadeBg:#21433B;--red:#E5796A;--redBg:#4A2723;--amber:#D9B857;--amberBg:#40361A;}}
+:root[data-theme="dark"]{
+  --paper:#162026;--paper2:#1D2A31;--card:#1F2D34;--ink:#E7ECE4;--soft:#9FB0B2;--line:#3A4D55;
+  --jade:#63BBA1;--jadeD:#8AD3BD;--jadeBg:#21433B;--red:#E5796A;--redBg:#4A2723;--amber:#D9B857;--amberBg:#40361A;}
+*,*::before,*::after{box-sizing:inherit}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--paper);color:var(--ink);font:400 16px/1.5 var(--sans)}
+a{color:var(--jadeD)}
+h1,h2,h3{font-family:var(--serif);line-height:1.2;margin:0}
+h1{font-size:clamp(1.8rem,5vw,2.7rem);font-weight:800}
+h2{font-size:1.25rem;font-weight:800;margin-bottom:.5rem}
+.wrap{max-width:1100px;margin:0 auto;padding:0 18px}
+header{padding:30px 0 16px;border-bottom:1px solid var(--line)}
+header p{color:var(--soft);max-width:70ch;margin:.5rem 0 0}
+.top{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:flex-start}
+.btn{font:500 .9rem var(--sans);color:var(--ink);background:transparent;border:1px solid var(--line);border-radius:6px;padding:6px 11px;cursor:pointer}
+.btn:hover{border-color:var(--jade)}
+.btn:focus-visible,select:focus-visible,input:focus-visible,.seg button:focus-visible,.tg:focus-visible{outline:2px solid var(--jade);outline-offset:2px}
+.controls{position:sticky;top:env(safe-area-inset-top,0px);z-index:4;background:var(--paper);border-bottom:1px solid var(--line);padding:10px 0}
+.controls .wrap{display:flex;gap:10px 18px;flex-wrap:wrap;align-items:center}
+.lbl{font-size:.85rem;color:var(--soft);margin-right:6px}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:6px;overflow:hidden;flex-wrap:wrap}
+.seg button{font:500 .92rem var(--sans);background:transparent;color:var(--soft);border:0;border-right:1px solid var(--line);padding:6px 12px;cursor:pointer}
+.seg button:last-child{border-right:0}
+.seg button[aria-pressed="true"]{background:var(--jade);color:#fff}
+:root[data-theme="dark"] .seg button[aria-pressed="true"]{color:#10201b}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .seg button[aria-pressed="true"]{color:#10201b}}
+select{font:inherit;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:6px;padding:5px 8px}
+main{display:grid;gap:26px;padding:22px 0 60px;grid-template-columns:minmax(0,1fr)}
+@media (min-width:960px){main{grid-template-columns:minmax(0,1fr) 340px;align-items:start}aside{position:sticky;top:76px}}
+
+/* árbol */
+ul.tree,ul.tree ul{list-style:none;margin:0;padding:0}
+ul.tree ul{margin-left:20px;padding-left:20px;border-left:2px solid var(--line)}
+li.node{position:relative;margin:8px 0}
+ul.tree ul>li.node::before{content:"";position:absolute;left:-20px;top:26px;width:18px;border-top:2px solid var(--line)}
+.card{display:flex;gap:10px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:8px;padding:7px 10px;min-height:48px}
+.card.item{border-left:4px solid var(--jade)}
+.card.root{border-left:4px solid var(--red);background:var(--jadeBg)}
+.card.mat{padding:5px 10px;min-height:40px}
+.node.owned>.card{opacity:.55}
+.node.owned>.card .nm{text-decoration:line-through;text-decoration-color:var(--jade)}
+.ic{position:relative;flex:none;width:36px;height:36px;border-radius:6px;overflow:hidden;background:var(--paper2);border:1px solid var(--line);display:grid;place-items:center}
+.card.mat .ic{width:30px;height:30px}
+.ic b{font:800 .95rem var(--serif);color:var(--jadeD)}
+.ic img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;background:var(--paper2)}
+.ic.ok b{display:none}
+.ic.k-mat b{color:var(--amber)} .ic.k-coin b{color:var(--amber)}
+.ic svg{width:70%;height:70%}
+.nm{flex:1;min-width:0}
+.nm .t{font-weight:700;overflow-wrap:anywhere}
+.nm .s{display:block;font-size:.82rem;color:var(--soft)}
+.qty{font-variant-numeric:tabular-nums;font-weight:700;white-space:nowrap}
+.tag{font-size:.74rem;padding:1px 7px;border-radius:99px;background:var(--jadeBg);color:var(--jadeD);white-space:nowrap}
+.tag.am{background:var(--amberBg);color:var(--amber)}
+.tag.rd{background:var(--redBg);color:var(--red)}
+.own{display:flex;gap:5px;align-items:center;font-size:.82rem;color:var(--soft);white-space:nowrap;cursor:pointer}
+.own input{width:17px;height:17px;accent-color:var(--jade)}
+.tg{font:700 1rem var(--sans);width:26px;height:26px;border:1px solid var(--line);border-radius:5px;background:transparent;color:var(--ink);cursor:pointer;flex:none}
+.tg-sp{width:26px;flex:none}
+.step{font:700 .75rem var(--sans);color:var(--soft);margin:12px 0 -2px;letter-spacing:.02em}
+.note{border-left:4px solid var(--amber);background:var(--amberBg);padding:8px 12px;border-radius:0 6px 6px 0;font-size:.9rem;margin:12px 0}
+.note.ok{border-left-color:var(--jade);background:var(--jadeBg)}
+
+/* resumen */
+.sum{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:14px 14px 10px}
+.sum table{width:100%;border-collapse:collapse;font-size:.9rem}
+.sum td{padding:5px 4px;border-bottom:1px solid var(--line);vertical-align:middle}
+.sum tr:last-child td{border-bottom:0}
+.sum td.n{text-align:right;font-variant-numeric:tabular-nums;font-weight:700}
+.sum .ic{width:24px;height:24px}
+.sum .row{display:flex;gap:8px;align-items:center}
+.sum small{color:var(--soft)}
+.sum hr{border:0;border-top:1px solid var(--line);margin:10px 0}
+footer{border-top:1px solid var(--line);padding:16px 0 40px;color:var(--soft);font-size:.88rem}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+@media (max-width:560px){.card{flex-wrap:wrap}.own{margin-left:46px}}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+  <div class="top"><h1>Árbol de recetas<br>Lunar → Rising Dawn</h1>
+    <div style="display:flex;gap:8px"><button class="btn" id="themeBtn" type="button">Cambiar tema</button><button class="btn" id="resetBtn" type="button">Borrar lo marcado</button></div></div>
+  <p>Elige una pieza y mira de qué se fabrica, paso por paso, hasta los materiales base. Marca "ya lo tengo" en cualquier paso y la lista de materiales se recalcula sin lo que ya no necesitas.</p>
+</div></header>
+
+<div class="controls"><div class="wrap">
+  <span><span class="lbl">Set</span><span class="seg" id="setSeg"></span></span>
+  <span><span class="lbl">Espacio</span><span class="seg" id="slotSeg"></span></span>
+  <span><span class="lbl">Resumen de</span><select id="scope"><option value="piece">esta pieza</option><option value="set">este set (6)</option><option value="all">las 18 piezas</option></select></span>
+  <span style="display:flex;gap:6px"><button class="btn" id="expAll" type="button">Abrir todo</button><button class="btn" id="colAll" type="button">Cerrar todo</button></span>
+</div></div>
+
+<div class="wrap"><main>
+  <section id="treeBox" aria-label="Árbol de la receta"></section>
+  <aside><div class="sum" id="sumBox"></div></aside>
+</main></div>
+
+<footer><div class="wrap">Datos de PWI oficial (pwdatabase.com, v1.6.4) y del Excel de títulos. <b>✓ pwdatabase</b> = leído en la base de datos. Los pasos sin marca usan las cantidades de la guía de títulos. Los íconos se cargan desde pwdatabase.com; si no responden verás una ficha con la inicial. Evolved puede tener diferencias; lo que veas en el juego manda.</div></footer>
+
+<script>
+const KEY="pwtree-v1";
+let S={own:{},ui:{set:"Lionheart",slot:"Casco",scope:"piece"}},mem=false;
+try{const r=localStorage.getItem(KEY);if(r)S=Object.assign(S,JSON.parse(r));}catch(e){mem=true}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){mem=true}};
+const $=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const fmt=n=>Number(n).toLocaleString("es",{maximumFractionDigits:1});
+const IMG=id=>`https://www.pwdatabase.com/images/icons/generalm/${id}.png`;
+const LINK=id=>`https://www.pwdatabase.com/pwi/items/${id}`;
+
+/* ---- datos ---- */
+const SLOTS=[["Casco","Casco"],["Capa","Capa"],["Pechera","Pechera"],["Brazos","Brazos"],["Pants","Piernas"],["Botas","Botas"]];
+const SPECIAL={Casco:["aqua",7],Capa:["chaos",5],Pechera:["steel",5],Pants:["earth",7],Botas:["life",7],Brazos:["flame",7]};
+const MAT={ // nombre, icono (id conocido o null), tipo
+ frag:["Fragment Crystal",16546,"mat"],transp:["Transparent Crystal",16547,"mat"],aqua:["Aqua Essence",16460,"mat"],flame:["Flame Essence",16461,"mat"],
+ earth:["Earth Essence",16462,"mat"],life:["Life Essence",16463,"mat"],steel:["Steel Essence",16464,"mat"],chaos:["Chaos Essence",16465,"mat"],
+ nature:["Essence of Nature",16545,"mat"],aura:["Sacred Mother's Aura",15274,"mat"],chroma:["Chromatic Tinder",16467,"mat"],unk:["Unknown Tinder",16466,"mat"],
+ unc:["Uncanny Crystal",25821,"mat"],mold:["Mold:★Awake.",null,"mat"],eod:["Essence of Defense",34852,"mat"],badge:["Basic Badge",34853,"mat"],coins:["Coins (millones)",null,"coin"]};
+// [nombre, id|null] por etapa
+const P={
+ Lionheart:{type:"Heavy",setName:"Gaia's Rampart",
+  Casco:{grn:["☆Solemnlight Gear", 16010],core:["Armorcore: Solemnlight Gear", 16708],dor:["☆Solar Flash Helm", 16011],lun:["☆☆Lunar Cascade Helm", 25913],glow:["☆☆Cascade Glow Helm", 25685],awk:["☆Awakened Ancestral Divine Helm", 33308],mold:["Mold:★Awake. Ances. Div. Helm", 34928],alt:["☆☆Lion's Roar Helm", 25703],full:true,npc:false},
+  Capa:{grn:["☆Solemnlight Cape", 15978],core:["Armorcore: Solemnlight Cape", 16709],dor:["☆Solar Flash Cape", 15981],lun:["☆☆Lunar Cascade Cape", 25928],glow:["☆☆Cascade Glow Cape", 25700],awk:["☆Awakened Demon Serene Robe", 34759],mold:["Mold:★Awake. Demon Seren. Robe", 34931],alt:["☆☆Lion's Roar Cloak", 25713],full:true,npc:false},
+  Pechera:{grn:["☆Solemnlight Plate", 15998],core:["Armorcore: Solemnlight Plate", 16704],dor:["☆Solar Flash Plate", 15999],lun:["☆☆Lunar Cascade Armor", 25915],glow:["☆☆Cascade Glow Armor", 25687],awk:["☆Awakened Lionheart Armor", 32525],mold:["Mold:★Awake. Lionheart Armor", 34922],alt:["☆☆Lion's Roar Armor", 25705],full:true,npc:true},
+  Brazos:{grn:["☆Solemnlight Arms", 15962],core:["Armorcore: Solemnlight Arms", 16707],dor:["☆Solar Flash Sleevelets", 15963],lun:["☆☆Lunar Cascade Sleeves", 25912],glow:["☆☆Cascade Glow Sleeves", 25684],awk:["☆Awakened Lionheart Vambraces", 32513],mold:["Mold:★Awake. Lionheart Sleeves", 34916],alt:["☆☆Lion's Roar Bracers", 25702],full:true,npc:true},
+  Pants:{grn:["☆Solemnlight Tasses", 15974],core:["Armorcore: Solemnlight Tasses", 16705],dor:["☆Solar Flash Tasses", 15975],lun:["☆☆Lunar Cascade Greaves", 25914],glow:["☆☆Cascade Glow Greaves", 25686],awk:["☆Awakened Lionheart Cuisses", 32519],mold:["Mold:★Awake. Lionheart Cuisses", 34919],alt:["☆☆Lion's Roar Greaves", 25704],full:true,npc:true},
+  Botas:{grn:["☆Solemnlight Greaves", 16025],core:["Armorcore: Solemnlight Greaves", 16706],dor:["☆Solar Flash Greaves", 16026],lun:["☆☆Lunar Cascade Boots", 25911],glow:["☆☆Cascade Glow Boots", 25683],awk:["☆Awakened Lionheart Greaves", 32531],mold:["Mold:★Awake. Lionheart Greaves", 34925],alt:["☆☆Lion's Roar Boots", 25701],full:true,npc:true}},
+  Ashura:{type:"Light",setName:"Unrelenting Avarice",
+  Casco:{grn:["☆Lone Troop Plate", 16004],core:["Armorcore: Lone Troop Plate", 16714],dor:["☆Buddha Light Helm", 16005],lun:["☆☆Endless Eclipse Helm", 25918],glow:["☆☆Myriad Blossom Helm", 25690],awk:["☆Awakened Ancestral Divine Hat", 33306],mold:["Mold:★Awake. Ances. Div. Hat", 34927],alt:["☆☆Shadow Ashura Hat", 25708],full:true,npc:false},
+  Capa:{grn:["☆Lone Troop Cape", 15979],core:["Armorcore: Lone Troop Cape", 16715],dor:["☆Buddha Light Cloak", 15982],lun:["☆☆Endless Eclipse Cloak", 25927],glow:["☆☆Myriad Blossom Cloak", 25699],awk:["☆Awakened Demon Obscure Robe", 34758],mold:["Mold:★Awake. Demon Obscu. Robe", 34930],alt:["☆☆Shadow Ashura Cloak", 25712],full:true,npc:false},
+  Pechera:{grn:["☆Lone Troop War Armor", 15994],core:["Armorcore: Lone Troop War Armor", 16710],dor:["☆Buddha Light War Armor", 15995],lun:["☆☆Endless Eclipse Plate", 25920],glow:["☆☆Myriad Blossom Plate", 25692],awk:["☆Awakened Ashura's Armor", 32523],mold:["Mold:★Awake. Ashura Armor", 34921],alt:["☆☆Shadow Ashura Plate", 25710],full:true,npc:true},
+  Brazos:{grn:["☆Lone Troop Wrists", 15958],core:["Armorcore: Lone Troop Wrists", 16713],dor:["☆Buddha Light Wristguards", 15959],lun:["☆☆Endless Eclipse Gloves", 25917],glow:["☆☆Myriad Blossom Gloves", 25689],awk:["☆Awakened Ashura's Gloves", 32511],mold:["Mold:★Awake. Ashura Gloves", 34915],alt:["☆☆Shadow Ashura Bracers", 25707],full:true,npc:true},
+  Pants:{grn:["☆Lone Troop Shins", 15970],core:["Armorcore: Lone Troop Shins", 16711],dor:["☆Buddha Light Shinguards", 15971],lun:["☆☆Endless Eclipse Greaves", 25919],glow:["☆☆Myriad Blossom Greaves", 25691],awk:["☆Awakened Ashura's Greaves", 32517],mold:["Mold:★Awake. Ashura Greaves", 34918],alt:["☆☆Shadow Ashura Greaves", 25709],full:true,npc:true},
+  Botas:{grn:["☆Lone Troop Shoes", 16014],core:["Armorcore: Lone Troop Shoes", 16712],dor:["☆Buddha Light Shoes", 16015],lun:["☆☆Endless Eclipse Boots", 25916],glow:["☆☆Myriad Blossom Boots", 25688],awk:["☆Awakened Ashura's Boots", 32529],mold:["Mold:★Awake. Ashura Boots", 34924],alt:["☆☆Shadow Ashura Boots", 25706],full:true,npc:true}},
+ Archangel:{type:"Arcane",setName:"Gift of the Seraph",
+  Casco:{grn:["☆Phoenix Headwear", 16002],core:["Armorcore: Phoenix Headwear", 16720],dor:["☆Phoenix Dance Headwear", 16003],lun:["☆☆Arcane Moon Hat", 25923],glow:["☆☆Dragon Rise Hat", 25695],awk:["☆Awakened Hat of Infinite Power", 33304],mold:["Mold:★Awake. Hat of Inf. Power", 34926],alt:["☆☆Sacred Legate Hat", 25716],full:true,npc:false},
+  Capa:{grn:["☆Phoenix Plume", 15980],core:["Armorcore: Phoenix Plume", 16721],dor:["☆Phoenix Dance Cloak", 15983],lun:["☆☆Arcane Moon Cloak", 25926],glow:["☆☆Dragon Rise Cloak", 25698],awk:["☆Awakened Demon Spell Robe", 34757],mold:["Mold:★Awake. Demon Spell Robe", 34929],alt:["☆☆Sacred Legate Cloak", 25711],full:true,npc:false},
+  Pechera:{grn:["☆Phoenix Robe", 15990],core:["Armorcore: Phoenix Robe", 16716],dor:["☆Phoenix Dance Robe", 15991],lun:["☆☆Arcane Moon Robe", 25925],glow:["☆☆Dragon Rise Robe", 25697],awk:["☆Awakened Archangel's Tunic", 32521],mold:["Mold:★Awake. Archangel Tunic", 34920],alt:["☆☆Sacred Legate Robe", 25718],full:true,npc:true},
+  Brazos:{grn:["☆Phoenix Wristguards", 15954],core:["Armorcore: Phoenix Wristguards", 16719],dor:["☆Phoenix Dance Wristguards", 15955],lun:["☆☆Arcane Moon Bracers", 25922],glow:["☆☆Dragon Rise Bracers", 25694],awk:["☆Awakened Archangel's Sleeves", 32509],mold:["Mold:★Awake. Archangel Sleeves", 34914],alt:["☆☆Sacred Legate Bracers", 25715],full:true,npc:true},
+  Pants:{grn:["☆Phoenix Pants", 15966],core:["Armorcore: Phoenix Pants", 16717],dor:["☆Phoenix Dance Pants", 15967],lun:["☆☆Arcane Moon Pants", 25924],glow:["☆☆Dragon Rise Pants", 25696],awk:["☆Awakened Archangel's Wrap", 32515],mold:["Mold:★Awake. Archangel Wrap", 34917],alt:["☆☆Sacred Legate Pants", 25717],full:true,npc:true},
+  Botas:{grn:["☆Phoenix Footwear", 16020],core:["Armorcore: Phoenix Footwear", 16718],dor:["☆Phoenix Dance Footwear", 16021],lun:["☆☆Arcane Moon Shoes", 25921],glow:["☆☆Dragon Rise Shoes", 25693],awk:["☆Awakened Archangel's Boots", 32527],mold:["Mold:★Awake. Archangel Boots", 34923],alt:["☆☆Sacred Legate Boots", 25714],full:true,npc:true}}
+};
+function slotLabel(s){return SLOTS.find(x=>x[0]===s)[1]}
+function greenMats(slot){
+  const m={frag:3,transp:1,aqua:2,flame:2,earth:2,life:2,nature:3}; const [k,q]=SPECIAL[slot]; m[k]=q; return m;
+}
+const STAGES=["awk","glow","lun","dor","core","grn"];
+const ownKey=(set,slot,st)=>`${set}|${slot}|${st}`;
+const owned=(set,slot,st)=>!!S.own[ownKey(set,slot,st)];
+
+/* materiales base que faltan para una pieza, respetando lo que ya tienes */
+function need(set,slot){
+  const m={}; const add=(k,q)=>m[k]=(m[k]||0)+q;
+  if(owned(set,slot,"awk")) return m;
+  add("mold",1);add("eod",1);add("badge",30);add("coins",2);
+  if(owned(set,slot,"glow")) return m; add("unc",150);
+  if(owned(set,slot,"lun")) return m; add("unc",100);
+  if(owned(set,slot,"dor")) return m; add("aura",4);add("chroma",1);add("unk",2);add("nature",10);
+  if(owned(set,slot,"core")||owned(set,slot,"grn")) return m;
+  const g=greenMats(slot); for(const k in g) add(k,g[k]);
+  return m;
+}
+
+/* ---- ícono ---- */
+const COIN='<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><rect x="9" y="9" width="6" height="6" fill="none" stroke="currentColor" stroke-width="2"/></svg>';
+function icon(id,label,kind){
+  const letter=esc((label.replace(/[^A-Za-z]/g,"")[0]||"?").toUpperCase());
+  if(kind==="coin") return `<span class="ic k-coin" style="color:var(--amber)">${COIN}</span>`;
+  const img=id?`<img src="${IMG(id)}" alt="" referrerpolicy="no-referrer" loading="eager" onload="this.parentNode.classList.add('ok')" onerror="this.remove()">`:"";
+  return `<span class="ic k-${kind||"equip"}"><b>${letter}</b>${img}</span>`;
+}
+
+/* ---- árbol ---- */
+const collapsed={};
+function matNode(k,q,extra){
+  const [n,id,kind]=MAT[k]; let name=n,sub="";
+  if(k==="mold"){name="Mold:★Awake. de la pieza"; sub="Se necesita uno por pieza"}
+  if(k==="coins"){return `<li class="node"><div class="card mat"><span class="tg-sp"></span>${icon(null,n,"coin")}<div class="nm"><span class="t">Coins</span><span class="s">Rising Dawn Forge</span></div><span class="qty">${q}M</span></div></li>`}
+  if(k==="badge") sub="No se comercia";
+  if(k==="unc") sub="1 Supply Token da 5 en Evolved";
+  const link=id?`<a href="${LINK(id)}" target="_blank" rel="noopener" style="font-size:.78rem">ID ${id}</a>`:"";
+  return `<li class="node"><div class="card mat"><span class="tg-sp"></span>${icon(id,n,kind)}<div class="nm"><span class="t">${esc(name)}</span>${sub?`<span class="s">${esc(sub)}</span>`:""} ${link}</div><span class="qty">×${q}</span></div></li>`;
+}
+function itemNode(set,slot,st,title,data,tags,childrenHTML,isRoot){
+  const key=ownKey(set,slot,st), own=!!S.own[key], col=!!collapsed[key]&&!own;
+  const [name,id]=data||["(nombre pendiente)",null];
+  const has=!!childrenHTML&&!own;
+  const link=id?`<a href="${LINK(id)}" target="_blank" rel="noopener" style="font-size:.78rem">ID ${id}</a>`:"";
+  return `<li class="node ${own?"owned":""}"><div class="card item ${isRoot?"root":""}">
+    ${has?`<button class="tg" type="button" data-tg="${key}" aria-expanded="${!col}" aria-label="Abrir o cerrar">${col?"+":"−"}</button>`:`<span class="tg-sp"></span>`}
+    ${icon(id,name,"equip")}
+    <div class="nm"><span class="t nmt">${esc(name)}</span><span class="s">${esc(title)} ${link}</span></div>
+    ${tags}
+    <label class="own"><input type="checkbox" data-own="${key}" ${own?"checked":""}>ya lo tengo</label>
+  </div>${has&&!col?`<ul>${childrenHTML}</ul>`:""}</li>`;
+}
+function tagOf(ok,txt){return `<span class="tag ${ok?"":"am"}">${txt}</span>`}
+function buildTree(set,slot){
+  const d=P[set][slot], g=greenMats(slot), full=!!d.full;
+  const tv=`<span class="tag">✓ pwdatabase</span>`, none="";
+  const grnData=d.grn||[`☆Equipo verde de ${slotLabel(slot)}`,null];
+  const grnChildren=Object.keys(g).map(k=>matNode(k,g[k])).join("");
+  const grn=itemNode(set,slot,"grn","Lunar Forge: Armor · Lunar Glade 355, 548",grnData,(full||d.greenOk)?tv:none,grnChildren);
+  const coreData=d.core||[`Armorcore de ${grnData[0].replace("☆","")}`,null];
+  const core=itemNode(set,slot,"core","Se obtiene al decomponer el verde",coreData,(full||d.core)?tv:none,grn);
+  const dor=itemNode(set,slot,"dor","Lunar Forge: Armor",d.dor,full?tv:none,core+matNode("aura",4)+matNode("chroma",1)+matNode("unk",2)+matNode("nature",10));
+  const lunData=d.lun||[`☆☆Lunar Cascade de ${slotLabel(slot)}`,null];
+  const lun=itemNode(set,slot,"lun","Ascenso 1"+(d.npc?" · Lunar Armor (675, 169)":""),lunData,full?tv:none,dor+matNode("unc",100));
+  const glowData=d.glow||[`☆☆Cascade Glow de ${slotLabel(slot)}`,null];
+  const glow=itemNode(set,slot,"glow","Ascenso 2"+(d.npc?" · Lunar Armor (675, 169)":""),glowData,full?tv:none,lun+matNode("unc",150));
+  const moldNode=d.mold?`<li class="node"><div class="card mat"><span class="tg-sp"></span>${icon(d.mold[1],d.mold[0],"mat")}<div class="nm"><span class="t">${esc(d.mold[0])}</span> <a href="${LINK(d.mold[1])}" target="_blank" rel="noopener" style="font-size:.78rem">ID ${d.mold[1]}</a></div><span class="qty">×1</span></div></li>`:matNode("mold",1);
+  const awk=itemNode(set,slot,"awk","Rising Dawn Forge",d.awk,full?tv:none,glow+moldNode+matNode("eod",1)+matNode("badge",30)+matNode("coins",2),true);
+  const extra=d.alt?`<div class="note ok">También puedes partir del ${esc(d.alt[0])} (ID ${d.alt[1]}) en vez del Cascade Glow; el resto de materiales es igual.</div>`:"";
+  return `<ul class="tree">${awk}</ul>${extra}`;
+}
+
+/* ---- resumen ---- */
+function pieces(scope){
+  const s=S.ui.set,sl=S.ui.slot;
+  if(scope==="piece") return [[s,sl]];
+  if(scope==="set") return SLOTS.map(x=>[s,x[0]]);
+  const out=[]; Object.keys(P).forEach(a=>SLOTS.forEach(x=>out.push([a,x[0]]))); return out;
+}
+function renderSummary(){
+  const ps=pieces(S.ui.scope), tot={};
+  ps.forEach(([a,b])=>{const m=need(a,b);for(const k in m)tot[k]=(tot[k]||0)+m[k]});
+  const order=["frag","transp","aqua","flame","earth","life","steel","chaos","nature","aura","chroma","unk","unc","mold","eod","badge","coins"];
+  const rows=order.filter(k=>tot[k]).map(k=>{const [n,id,kind]=MAT[k];
+    return `<tr><td><span class="row">${icon(id,n,kind)}<span>${esc(n)}</span></span></td><td class="n">${k==="coins"?fmt(tot[k])+"M":fmt(tot[k])}</td></tr>`}).join("");
+  const label={piece:"esta pieza",set:`el set ${S.ui.set} (6 piezas)`,all:"las 18 piezas"}[S.ui.scope];
+  const sup=tot.unc?`<hr><small>Las ${fmt(tot.unc)} Uncanny Crystal equivalen a <b>${fmt(tot.unc/5)} Supply Tokens</b> (1 Supply Token = 5 Uncanny en Evolved).</small>`:"";
+  const bd=tot.badge?`<br><small>Las ${fmt(tot.badge)} Basic Badge no se pueden comerciar.</small>`:"";
+  $("#sumBox").innerHTML=`<h2>Materiales que faltan</h2><small>Para ${label}, sin contar lo que marcaste como "ya lo tengo".</small>
+    ${rows?`<table style="margin-top:8px"><tbody>${rows}</tbody></table>`:`<p>No falta nada.</p>`}${sup}${bd}`;
+}
+
+/* ---- render ---- */
+function render(){
+  const {set,slot}=S.ui;
+  $("#setSeg").innerHTML=Object.keys(P).map(s=>`<button type="button" data-set="${s}" aria-pressed="${s===set}">${s} · ${P[s].type}</button>`).join("");
+  $("#slotSeg").innerHTML=SLOTS.map(([k,l])=>`<button type="button" data-slot="${k}" aria-pressed="${k===slot}">${l}</button>`).join("");
+  $("#scope").value=S.ui.scope;
+  $("#treeBox").innerHTML=`<p style="margin:0 0 6px;color:var(--soft)">Set Rising Dawn: <b style="color:var(--ink)">${esc(P[set].setName)}</b></p>`+buildTree(set,slot);
+  renderSummary();
+}
+document.addEventListener("click",e=>{
+  const a=e.target.closest("[data-set]");if(a){S.ui.set=a.dataset.set;save();return render()}
+  const b=e.target.closest("[data-slot]");if(b){S.ui.slot=b.dataset.slot;save();return render()}
+  const t=e.target.closest("[data-tg]");if(t){const k=t.dataset.tg;collapsed[k]=!collapsed[k];return render()}
+});
+document.addEventListener("change",e=>{
+  const el=e.target;
+  if(el.dataset.own){ if(el.checked)S.own[el.dataset.own]=true;else delete S.own[el.dataset.own]; save(); return render()}
+  if(el.id==="scope"){S.ui.scope=el.value;save();renderSummary()}
+});
+function setAll(v){ // abrir/cerrar todo en la pieza actual
+  const {set,slot}=S.ui; STAGES.forEach(st=>{collapsed[ownKey(set,slot,st)]=v}); render();
+}
+$("#expAll").addEventListener("click",()=>setAll(false));
+$("#colAll").addEventListener("click",()=>setAll(true));
+$("#themeBtn").addEventListener("click",()=>{
+  const dark=S.ui.theme?S.ui.theme==="dark":matchMedia("(prefers-color-scheme:dark)").matches;
+  S.ui.theme=dark?"light":"dark";save();applyTheme()});
+function applyTheme(){S.ui.theme?document.documentElement.setAttribute("data-theme",S.ui.theme):document.documentElement.removeAttribute("data-theme")}
+let armed=0;
+$("#resetBtn").addEventListener("click",function(){
+  if(!armed){this.textContent="¿Seguro? Pulsa otra vez";armed=setTimeout(()=>{this.textContent="Borrar lo marcado";armed=0},4000);return}
+  clearTimeout(armed);armed=0;this.textContent="Borrar lo marcado";S.own={};save();render()});
+function fromHash(){const m=location.hash.match(/^#(\w+)\/(\w+)$/);if(m&&P[m[1]]&&SLOTS.some(x=>x[0]===m[2])){S.ui.set=m[1];S.ui.slot=m[2];S.ui.scope="piece"}}
+fromHash();addEventListener("hashchange",()=>{fromHash();render()});
+applyTheme();render();
+</script>
+</body>
+</html>
