@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Árbol de recetas · Lunar → Rising Dawn</title>
+<title>Árbol de recetas · Rising Dawn y Twilight</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;700&family=Shippori+Mincho:wght@600;800&display=swap" rel="stylesheet">
@@ -102,21 +102,40 @@ footer{border-top:1px solid var(--line);padding:16px 0 40px;color:var(--soft);fo
 .sitenav a:hover{color:var(--ink);background:var(--card)}
 .sitenav a[aria-current="page"]{background:var(--jadeBg);color:var(--jadeD);font-weight:700}
 .sitenav .lbl{font-size:.8rem;color:var(--soft)}
+
+/* móvil: árbol más compacto (Twilight tiene hasta 3 niveles anidados) */
+@media (max-width:560px){
+  ul.tree ul{margin-left:6px;padding-left:9px}
+  ul.tree ul>li.node::before{left:-9px;width:9px}
+  .card{padding:6px 8px;gap:6px}
+  .card .nm{flex:1 1 110px}
+  .card.mat .tg-sp{display:none}
+  .card.item .tag{display:none}
+  .own{margin-left:0}
+}
 </style>
 </head>
 <body>
 <nav class="sitenav" aria-label="Páginas del gremio"><div class="wrap"><span class="lbl">Evolved PW:</span><a href="guia-equipo-evolved.html">Guía de equipo</a><a href="titulos-piezas.html">Títulos → piezas</a><a href="arbol-recetas-rising-dawn.html" aria-current="page">Árbol de recetas</a></div></nav>
 <header><div class="wrap">
-  <div class="top"><h1>Árbol de recetas<br>Lunar → Rising Dawn</h1>
+  <div class="top"><h1>Árbol de recetas<br>Rising Dawn y Twilight</h1>
     <div style="display:flex;gap:8px"><button class="btn" id="themeBtn" type="button">Cambiar tema</button><button class="btn" id="resetBtn" type="button">Borrar lo marcado</button></div></div>
-  <p>Elige una pieza y mira de qué se fabrica, paso por paso, hasta los materiales base. Marca "ya lo tengo" en cualquier paso y la lista de materiales se recalcula sin lo que ya no necesitas.</p>
-  <p>Ver los títulos que piden estas piezas, en <a href="titulos-piezas.html">Títulos → piezas</a>: <a href="titulos-piezas.html#rd-lionheart">Rising Dawn: Lionheart</a> · <a href="titulos-piezas.html#rd-ashura">Rising Dawn: Ashura</a> · <a href="titulos-piezas.html#rd-archangel">Rising Dawn: Archangel</a>. Las piezas doradas de cada set son también las de los títulos <a href="titulos-piezas.html#lun-ia">Lunar: Armor Master I</a>, <a href="titulos-piezas.html#lun-iia">II</a> y <a href="titulos-piezas.html#lun-iiia">III</a>.</p>
+  <p>Elige una cadena (Rising Dawn o Twilight), una pieza, y mira de qué se fabrica, paso por paso, hasta los materiales base. Marca "ya lo tengo" en cualquier paso y la lista de materiales se recalcula sin lo que ya no necesitas.</p>
+  <p>Ver los títulos que piden estas piezas, en <a href="titulos-piezas.html">Títulos → piezas</a>: <a href="titulos-piezas.html#rd-lionheart">Rising Dawn: Lionheart</a> · <a href="titulos-piezas.html#rd-ashura">Rising Dawn: Ashura</a> · <a href="titulos-piezas.html#rd-archangel">Rising Dawn: Archangel</a>. Las piezas doradas de cada set son también las de los títulos <a href="titulos-piezas.html#lun-ia">Lunar: Armor Master I</a>, <a href="titulos-piezas.html#lun-iia">II</a> y <a href="titulos-piezas.html#lun-iiia">III</a>. Twilight: <a href="titulos-piezas.html#tw-1">Lionheart</a> · <a href="titulos-piezas.html#tw-2">Asura</a> · <a href="titulos-piezas.html#tw-3">Archangel</a>.</p>
 </div></header>
 
 <div class="controls"><div class="wrap">
+  <span><span class="lbl">Cadena</span><span class="seg" id="modeSeg"></span></span>
+  <span id="rdCtl" style="display:contents">
   <span><span class="lbl">Set</span><span class="seg" id="setSeg"></span></span>
   <span><span class="lbl">Espacio</span><span class="seg" id="slotSeg"></span></span>
   <span><span class="lbl">Resumen de</span><select id="scope"><option value="piece">esta pieza</option><option value="set">este set (6)</option><option value="all">las 18 piezas</option></select></span>
+  </span>
+  <span id="ttCtl" style="display:none">
+  <span><span class="lbl">Set</span><span class="seg" id="ttSetSeg"></span></span>
+  <span><span class="lbl">Pieza</span><span class="seg" id="ttPieceSeg"></span></span>
+  <span><span class="lbl">Resumen de</span><select id="ttScope"><option value="piece">esta pieza</option><option value="set">este set (7 piezas)</option><option value="all">los 3 sets (21 piezas)</option></select></span>
+  </span>
   <span style="display:flex;gap:6px"><button class="btn" id="expAll" type="button">Abrir todo</button><button class="btn" id="colAll" type="button">Cerrar todo</button></span>
 </div></div>
 
@@ -125,7 +144,7 @@ footer{border-top:1px solid var(--line);padding:16px 0 40px;color:var(--soft);fo
   <aside><div class="sum" id="sumBox"></div></aside>
 </main></div>
 
-<footer><div class="wrap">Datos de PWI oficial (pwdatabase.com, v1.6.4) y del Excel de títulos. <b>✓ pwdatabase</b> = leído en la base de datos. Los pasos sin marca usan las cantidades de la guía de títulos. Los íconos se cargan desde pwdatabase.com; si no responden verás una ficha con la inicial. Evolved puede tener diferencias; lo que veas en el juego manda.</div></footer>
+<footer><div class="wrap">Datos de PWI oficial (pwdatabase.com, v1.6.4) y del Excel de títulos. Twilight: recetas leídas en los NPC Twilight Forge: Armor y Ornament. <b>✓ pwdatabase</b> = leído en la base de datos. Los pasos sin marca usan las cantidades de la guía de títulos. Los íconos se cargan desde pwdatabase.com; si no responden verás una ficha con la inicial. Evolved puede tener diferencias; lo que veas en el juego manda.</div></footer>
 
 <script>
 const KEY="pwtree-v1";
@@ -135,7 +154,8 @@ const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){mem=tru
 const $=s=>document.querySelector(s);
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const fmt=n=>Number(n).toLocaleString("es",{maximumFractionDigits:1});
-const IMG=id=>`https://www.pwdatabase.com/images/icons/generalm/${id}.png`;
+const IMG_OVR={16546:"data:image/png;base64,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"}; /* el ícono de pwdatabase para el Fragment Crystal no coincide con el del juego: se usa el de una captura de Evolved */
+const IMG=id=>IMG_OVR[id]||`https://www.pwdatabase.com/images/icons/generalm/${id}.png`;
 const LINK=id=>`https://www.pwdatabase.com/pwi/items/${id}`;
 
 /* ---- datos ---- */
@@ -264,8 +284,72 @@ function renderSummary(){
     ${rows?`<table style="margin-top:8px"><tbody>${rows}</tbody></table>`:`<p>No falta nada.</p>`}${sup}${bd}`;
 }
 
+
+/* ================= TWILIGHT ================= */
+const TT={"mats": {"15461": {"n": "Ultimate Substance"}, "15308": {"n": "Sign of Twilight", "c": "Purple", "w": "morado"}, "15279": {"n": "Stone of Sacred Temple", "c": "Purple", "w": "morado"}, "15256": {"n": "Klunky Sword", "c": "Purple", "w": "morado"}, "15307": {"n": "Illusion Stone", "c": "Gold", "w": "dorado · TT 3-3 · Illusion Lord: Armageddon"}, "15294": {"n": "Tsu's Ghost Mask", "c": "Green", "w": "verde · TT 3-2 · Twilight Minister: Vacuity"}, "15300": {"n": "Ghost Lord's Protection", "c": "Gold", "w": "dorado · TT 3-3 · Steelation: Doom"}, "15290": {"n": "Ghost Lord's Dark Aura", "c": "Green", "w": "verde · TT 3-3 · Steelation: Doom"}, "15301": {"n": "Giant Beast's Footprint", "c": "Gold", "w": "dorado · TT 3-3 · Dark Colluseat: Doom"}, "15284": {"n": "Evil Minion's Burning Heart", "c": "Green", "w": "verde · TT 3-3 · Djinscream: Doom"}, "15299": {"n": "Sorceress's Soul", "c": "Gold", "w": "dorado · TT 3-2 · Deathflow: Vacuity"}, "15280": {"n": "Shards of Darkness", "c": "Green", "w": "verde · TT 3-2 · Coredash: Vacuity"}, "15303": {"n": "Tsuchun's Dark Soul", "c": "Gold", "w": "dorado · TT 3-2 · Twilight Minister: Vacuity"}, "15292": {"n": "Skaidread's Orb", "c": "Green", "w": "verde · TT 3-2 · Twilight Emperor: Vacuity"}, "15302": {"n": "Empire's Back Image", "c": "Gold", "w": "dorado · TT 3-2 · Twilight Emperor: Vacuity"}, "15295": {"n": "Minister's Stone", "c": "Green", "w": "verde · TT 3-2 · Twilight Minister: Vacuity"}, "15268": {"n": "Giant Beast's Armor", "c": "Green", "w": "verde · TT 3-1 · Dark Colluseat: Null · chips: 840 chips (≈18M c/u) · total 15120 chips"}, "15265": {"n": "Dust of Stars", "c": "Green", "w": "verde · TT 2-2 · Astralwalker: Naught"}, "15267": {"n": "Antenna of Consumer of Souls", "c": "Green", "w": "verde · TT 2-3 · Soulripper: Null · chips: 488 chips (≈10.44M c/u) · total 2928 chips"}, "15263": {"n": "Sacred Mother's Orb", "c": "Green", "w": "verde · TT 3-1 · Illusion Nemen: Null"}, "15262": {"n": "Sorceress's Hand", "c": "Green", "w": "verde · TT 3-1 · Deathflow: Null · chips: 490 chips (≈10.5M c/u) · total 8820 chips"}, "15260": {"n": "Evil Minion's Horn", "c": "Green", "w": "verde · TT 3-1 · Djinscream: Null · chips: 420 chips (≈9M c/u) · total 7560 chips"}, "15259": {"n": "Forshura's Arm", "c": "Green", "w": "verde · TT 2-3 · General Wurlord: Null"}, "15258": {"n": "Iron Plate of Darkness", "c": "Green", "w": "verde · TT 3-1 · Coredash: Null · chips: 210 chips (≈4.5M c/u) · total 1260 chips"}, "15276": {"n": "Giant Beast's Shell", "c": "Gold", "w": "dorado · TT 3-1 · Dark Colluseast: Null"}, "15266": {"n": "Ghost Lord's Ribbon", "c": "Green", "w": "verde · TT 3-1 · Steelation: Null"}, "15240": {"n": "War Drum", "c": "Green", "w": "verde · TT 1-3 · Lord of Percussion: Substancia"}, "15239": {"n": "Chin's Plate", "c": "Green", "w": "verde · TT 1-3 · Chintien: Substancia"}, "15264": {"n": "Giant Ape's Tail", "c": "Green", "w": "verde · TT 2-3 · Cosmoforce: Null · chips: 105 chips (≈5.5M c/u) · total 1890 chips"}, "15244": {"n": "Ancient Serpent's Blood", "c": "Green", "w": "verde · TT 1-3 · Vipenalt: Substancia"}, "15261": {"n": "Horn of Feng's Horse", "c": "Green", "w": "verde · TT 2-3 · General Feng: Null · chips: 252 chips (≈5.4M c/u) · total 7560 chips"}, "15242": {"n": "Soulgatherer's Mirror", "c": "Green", "w": "verde · TT 1-3 · Soulbanisher: Substancia"}}, "sets": [{"id": "Lionheart", "type": "Heavy", "title": "Twilight: Lionheart", "pieces": [{"k": "Pechera", "tiers": [{"n": "☆Lionheart Plate", "id": 14928, "lvl": 99, "rid": 1969, "npc": "armor", "mats": [[15307, 2], [15294, 8], [15308, 16], [15461, 30]], "sou": [15411, "Souledge: Mountcrasher Plate"]}, {"n": "☆Mountcrasher Plate", "id": 14926, "lvl": 90, "rid": 1957, "npc": "armor", "mats": [[15268, 5], [15265, 5], [15279, 10], [15461, 12]]}]}, {"k": "Brazos", "tiers": [{"n": "☆Lionheart Vambraces", "id": 14946, "lvl": 99, "rid": 1972, "npc": "armor", "mats": [[15299, 2], [15280, 8], [15308, 16], [15461, 30]], "sou": [15420, "Souledge: Mountcrasher Bracers"]}, {"n": "☆Mountcrasher Bracers", "id": 14944, "lvl": 90, "rid": 1960, "npc": "armor", "mats": [[15259, 5], [15258, 5], [15279, 10], [15461, 12]]}]}, {"k": "Piernas", "tiers": [{"n": "☆Lionheart Cuisses", "id": 14934, "lvl": 99, "rid": 1970, "npc": "armor", "mats": [[15300, 2], [15290, 8], [15308, 16], [15461, 30]], "sou": [15414, "Souledge: Mountcrasher Cuisses"]}, {"n": "☆Mountcrasher Cuisses", "id": 14932, "lvl": 90, "rid": 1958, "npc": "armor", "mats": [[15267, 5], [15263, 5], [15279, 10], [15461, 12]]}]}, {"k": "Botas", "tiers": [{"n": "☆Lionheart Greaves", "id": 14940, "lvl": 99, "rid": 1971, "npc": "armor", "mats": [[15301, 2], [15284, 8], [15308, 16], [15461, 30]], "sou": [15417, "Souledge: Mountcrasher Greaves"]}, {"n": "☆Mountcrasher Greaves", "id": 14938, "lvl": 90, "rid": 1959, "npc": "armor", "mats": [[15262, 5], [15260, 5], [15279, 10], [15461, 12]]}]}, {"k": "Casco", "tiers": [{"n": "☆Ancient Behemoth's Helm", "id": 14996, "lvl": 90, "rid": 1954, "npc": "armor", "mats": [[15276, 2], [15266, 8], [15279, 16], [15461, 24]], "sou": [15445, "Souledge: Chintien's Helmet"]}, {"n": "☆Chintien's Helmet", "id": 14995, "lvl": 80, "rid": 1940, "npc": "armor", "mats": [[15240, 5], [15239, 5], [15256, 10], [15461, 9]]}]}, {"k": "Collar", "tiers": [{"n": "☆Lionheart Necklace", "id": 15004, "lvl": 99, "rid": 2006, "npc": "ornament", "mats": [[15303, 2], [15292, 8], [15308, 16], [15461, 30]], "sou": [15448, "Souledge: Sunshine Necklace"]}, {"n": "☆Sunshine Necklace", "id": 15003, "lvl": 90, "rid": 2000, "npc": "ornament", "mats": [[15264, 5], [15262, 5], [15279, 10], [15461, 12]], "sou": [15447, "Souledge: Necklace of the Earth"]}, {"n": "☆Necklace of the Earth", "id": 15001, "lvl": 80, "rid": 1984, "npc": "ornament", "mats": [[15244, 5], [15239, 5], [15256, 10], [15461, 9]]}]}, {"k": "Cinturon", "tiers": [{"n": "☆Lionheart Belt", "id": 15016, "lvl": 99, "rid": 2009, "npc": "ornament", "mats": [[15302, 2], [15295, 8], [15308, 16], [15461, 30]], "sou": [15454, "Souledge: Sunshine Belt"]}, {"n": "☆Sunshine Belt", "id": 15015, "lvl": 90, "rid": 2003, "npc": "ornament", "mats": [[15263, 5], [15261, 5], [15279, 10], [15461, 12]], "sou": [15453, "Souledge: Belt of the Earth"]}, {"n": "☆Belt of the Earth", "id": 15013, "lvl": 80, "rid": 1987, "npc": "ornament", "mats": [[15242, 5], [15239, 5], [15256, 10], [15461, 9]]}]}]}, {"id": "Asura", "type": "Light", "title": "Twilight: Asura", "pieces": [{"k": "Pechera", "tiers": [{"n": "☆Ashura's Armor", "id": 14976, "lvl": 99, "rid": 1977, "npc": "armor", "mats": [[15307, 2], [15294, 8], [15308, 16], [15461, 30]], "sou": [15435, "Souledge: Skywalker Shell"]}, {"n": "☆Skywalker Shell", "id": 14974, "lvl": 90, "rid": 1965, "npc": "armor", "mats": [[15268, 5], [15265, 5], [15279, 10], [15461, 12]]}]}, {"k": "Brazos", "tiers": [{"n": "☆Ashura's Bracers", "id": 14994, "lvl": 99, "rid": 1980, "npc": "armor", "mats": [[15299, 2], [15280, 8], [15308, 16], [15461, 30]], "sou": [15444, "Souledge: Skywalker Bracers"]}, {"n": "☆Skywalker Bracers", "id": 14992, "lvl": 90, "rid": 1968, "npc": "armor", "mats": [[15259, 5], [15258, 5], [15279, 10], [15461, 12]]}]}, {"k": "Piernas", "tiers": [{"n": "☆Ashura's Greaves", "id": 14982, "lvl": 99, "rid": 1978, "npc": "armor", "mats": [[15300, 2], [15290, 8], [15308, 16], [15461, 30]], "sou": [15438, "Souledge: Skywalker Shins"]}, {"n": "☆Skywalker Shins", "id": 14980, "lvl": 90, "rid": 1966, "npc": "armor", "mats": [[15267, 5], [15263, 5], [15279, 10], [15461, 12]]}]}, {"k": "Botas", "tiers": [{"n": "☆Ashura's Boots", "id": 14988, "lvl": 99, "rid": 1979, "npc": "armor", "mats": [[15301, 2], [15284, 8], [15308, 16], [15461, 30]], "sou": [15441, "Souledge: Skywalker Shoes"]}, {"n": "☆Skywalker Shoes", "id": 14986, "lvl": 90, "rid": 1967, "npc": "armor", "mats": [[15262, 5], [15260, 5], [15279, 10], [15461, 12]]}]}, {"k": "Casco", "tiers": [{"n": "☆Ancient Behemoth's Helm", "id": 14996, "lvl": 90, "rid": 1954, "npc": "armor", "mats": [[15276, 2], [15266, 8], [15279, 16], [15461, 24]], "sou": [15445, "Souledge: Chintien's Helmet"]}, {"n": "☆Chintien's Helmet", "id": 14995, "lvl": 80, "rid": 1940, "npc": "armor", "mats": [[15240, 5], [15239, 5], [15256, 10], [15461, 9]]}]}, {"k": "Collar", "tiers": [{"n": "☆Ashura's Necklace", "id": 15012, "lvl": 99, "rid": 2008, "npc": "ornament", "mats": [[15303, 2], [15292, 8], [15308, 16], [15461, 30]], "sou": [15452, "Souledge: Necklace of the Stars"]}, {"n": "☆Necklace of the Stars", "id": 15011, "lvl": 90, "rid": 2002, "npc": "ornament", "mats": [[15264, 5], [15262, 5], [15279, 10], [15461, 12]], "sou": [15451, "Souledge: Necklace of the Tides"]}, {"n": "☆Necklace of the Tides", "id": 15009, "lvl": 80, "rid": 1986, "npc": "ornament", "mats": [[15244, 5], [15239, 5], [15256, 10], [15461, 9]]}]}, {"k": "Cinturon", "tiers": [{"n": "☆Ashura's Belt", "id": 15025, "lvl": 99, "rid": 2011, "npc": "ornament", "mats": [[15302, 2], [15295, 8], [15308, 16], [15461, 30]], "sou": [15458, "Souledge: Belt of the Stars"]}, {"n": "☆Belt of the Stars", "id": 15024, "lvl": 90, "rid": 2005, "npc": "ornament", "mats": [[15263, 5], [15261, 5], [15279, 10], [15461, 12]], "sou": [15457, "Souledge: Belt of the Tides"]}, {"n": "☆Belt of the Tides", "id": 15022, "lvl": 80, "rid": 1989, "npc": "ornament", "mats": [[15242, 5], [15239, 5], [15256, 10], [15461, 9]]}]}]}, {"id": "Archangel", "type": "Arcane", "title": "Twilight: Archangel", "pieces": [{"k": "Pechera", "tiers": [{"n": "☆Archangel's Tunic", "id": 14952, "lvl": 99, "rid": 1973, "npc": "armor", "mats": [[15307, 2], [15294, 8], [15308, 16], [15461, 30]], "sou": [15423, "Souledge: Acrobatic Robe"]}, {"n": "☆Acrobatic Robe", "id": 14950, "lvl": 90, "rid": 1961, "npc": "armor", "mats": [[15268, 5], [15265, 5], [15279, 10], [15461, 12]]}]}, {"k": "Brazos", "tiers": [{"n": "☆Archangel's Sleeves", "id": 14970, "lvl": 99, "rid": 1976, "npc": "armor", "mats": [[15299, 2], [15280, 8], [15308, 16], [15461, 30]], "sou": [15432, "Souledge: Acrobatic Armlets"]}, {"n": "☆Acrobatic Armlets", "id": 14968, "lvl": 90, "rid": 1964, "npc": "armor", "mats": [[15259, 5], [15258, 5], [15279, 10], [15461, 12]]}]}, {"k": "Piernas", "tiers": [{"n": "☆Archangel's Wrap", "id": 14958, "lvl": 99, "rid": 1974, "npc": "armor", "mats": [[15300, 2], [15290, 8], [15308, 16], [15461, 30]], "sou": [15426, "Souledge: Acrobatic Pants"]}, {"n": "☆Acrobatic Pants", "id": 14956, "lvl": 90, "rid": 1962, "npc": "armor", "mats": [[15267, 5], [15263, 5], [15279, 10], [15461, 12]]}]}, {"k": "Botas", "tiers": [{"n": "☆Archangel's Boots", "id": 14964, "lvl": 99, "rid": 1975, "npc": "armor", "mats": [[15301, 2], [15284, 8], [15308, 16], [15461, 30]], "sou": [15429, "Souledge: Acrobatic Boots"]}, {"n": "☆Acrobatic Boots", "id": 14962, "lvl": 90, "rid": 1963, "npc": "armor", "mats": [[15262, 5], [15260, 5], [15279, 10], [15461, 12]]}]}, {"k": "Casco", "tiers": [{"n": "☆Ancient Behemoth's Helm", "id": 14996, "lvl": 90, "rid": 1954, "npc": "armor", "mats": [[15276, 2], [15266, 8], [15279, 16], [15461, 24]], "sou": [15445, "Souledge: Chintien's Helmet"]}, {"n": "☆Chintien's Helmet", "id": 14995, "lvl": 80, "rid": 1940, "npc": "armor", "mats": [[15240, 5], [15239, 5], [15256, 10], [15461, 9]]}]}, {"k": "Collar", "tiers": [{"n": "☆Archangel's Pendant", "id": 15008, "lvl": 99, "rid": 2007, "npc": "ornament", "mats": [[15303, 2], [15292, 8], [15308, 16], [15461, 30]], "sou": [15450, "Souledge: Luna's Necklace"]}, {"n": "☆Luna's Necklace", "id": 15007, "lvl": 90, "rid": 2001, "npc": "ornament", "mats": [[15264, 5], [15262, 5], [15279, 10], [15461, 12]], "sou": [15449, "Souledge: Divine Wind Necklace"]}, {"n": "☆Divine Wind Necklace", "id": 15005, "lvl": 80, "rid": 1985, "npc": "ornament", "mats": [[15244, 5], [15239, 5], [15256, 10], [15461, 9]]}]}, {"k": "Cinturon", "tiers": [{"n": "☆Archangel's Sash", "id": 15021, "lvl": 99, "rid": 2010, "npc": "ornament", "mats": [[15302, 2], [15295, 8], [15308, 16], [15461, 30]], "sou": [15456, "Souledge: Luna's Belt"]}, {"n": "☆Luna's Belt", "id": 15020, "lvl": 90, "rid": 2004, "npc": "ornament", "mats": [[15263, 5], [15261, 5], [15279, 10], [15461, 12]], "sou": [15455, "Souledge: Divine Wind Belt"]}, {"n": "☆Belt of Divine Wind", "id": 15018, "lvl": 80, "rid": 1988, "npc": "ornament", "mats": [[15242, 5], [15239, 5], [15256, 10], [15461, 9]]}]}]}], "slots": [["Pechera", "Pechera"], ["Brazos", "Brazos"], ["Piernas", "Piernas"], ["Botas", "Botas"], ["Casco", "Casco"], ["Collar", "Collar"], ["Cinturon", "Cinturón"]], "npc": {"armor": {"n": "Twilight Forge: Armor", "id": 15495, "w": "Twilight Temple 351 596 · mundo 521 628"}, "ornament": {"n": "Twilight Forge: Ornament", "id": 15496, "w": "Twilight Temple 351 595 · mundo 521 628"}}};
+S.ui.mode=S.ui.mode||"rd";
+S.ui.tt=S.ui.tt||{set:"Lionheart",piece:"Pechera",scope:"piece"};
+const ttSet=id=>TT.sets.find(s=>s.id===id)||TT.sets[0];
+const ttKey=(set,pk,i)=>`tt|${set}|${pk}|${i}`;
+const ttTiers=(set,pk)=>(ttSet(set).pieces.find(p=>p.k===pk)||ttSet(set).pieces[0]).tiers;
+function ttNeed(set,pk){const m={},t=ttTiers(set,pk);
+  for(let i=0;i<t.length;i++){ if(S.own[ttKey(set,pk,i)]) break; t[i].mats.forEach(([id,q])=>m[id]=(m[id]||0)+q); } return m}
+function ttMat(id,q){const m=TT.mats[id];
+  return `<li class="node"><div class="card mat"><span class="tg-sp"></span>${icon(id,m.n,"mat")}<div class="nm"><span class="t">${esc(m.n)}</span>${m.w?`<span class="s">${esc(m.w)}</span>`:""} <a href="${LINK(id)}" target="_blank" rel="noopener" style="font-size:.78rem">ID ${id}</a></div><span class="qty">×${q}</span></div></li>`}
+function ttItem(set,pk,i){
+  const tiers=ttTiers(set,pk), t=tiers[i], key=ttKey(set,pk,i), own=!!S.own[key], col=!!collapsed[key]&&!own;
+  const npc=TT.npc[t.npc], isRoot=i===0;
+  const plain=t.mats.filter(m=>m[0]!==15461), us=t.mats.filter(m=>m[0]===15461);
+  let kids=plain.map(([id,q])=>ttMat(id,q)).join("");
+  if(t.sou){const nx=tiers[i+1];
+    kids+=`<li class="node"><div class="card mat"><span class="tg-sp"></span>${icon(t.sou[0],t.sou[1],"mat")}<div class="nm"><span class="t">${esc(t.sou[1])}</span><span class="s">Se obtiene decomponiendo la ${esc(nx.n)} (nivel ${nx.lvl}); esa pieza se destruye</span> <a href="${LINK(t.sou[0])}" target="_blank" rel="noopener" style="font-size:.78rem">ID ${t.sou[0]}</a></div><span class="qty">×1</span></div><ul>${ttItem(set,pk,i+1)}</ul></li>`;}
+  kids+=us.map(([id,q])=>ttMat(id,q)).join("");
+  const has=!own&&!!kids;
+  const link=`<a href="${LINK(t.id)}" target="_blank" rel="noopener" style="font-size:.78rem">ID ${t.id}</a>`;
+  const rec=`<a href="https://www.pwdatabase.com/pwi/recipe/${t.rid}" target="_blank" rel="noopener" style="font-size:.78rem">receta ${t.rid}</a>`;
+  return `<li class="node ${own?"owned":""}"><div class="card item ${isRoot?"root":""}">
+    ${has?`<button class="tg" type="button" data-ttg="${key}" aria-expanded="${!col}" aria-label="Abrir o cerrar">${col?"+":"−"}</button>`:`<span class="tg-sp"></span>`}
+    ${icon(t.id,t.n,"equip")}
+    <div class="nm"><span class="t nmt">${esc(t.n)}</span><span class="s">${esc(npc.n)} · nivel ${t.lvl} ${link} ${rec}</span></div>
+    <span class="tag">✓ pwdatabase</span>
+    <label class="own"><input type="checkbox" data-own="${key}" ${own?"checked":""}>ya lo tengo</label>
+  </div>${has&&!col?`<ul>${kids}</ul>`:""}</li>`;
+}
+function ttPieces(scope){
+  const a=S.ui.tt, st=ttSet(a.set);
+  if(scope==="piece") return [[a.set,a.piece]];
+  if(scope==="set") return st.pieces.map(p=>[a.set,p.k]);
+  const out=[]; TT.sets.forEach(s=>s.pieces.forEach(p=>out.push([s.id,p.k]))); return out;
+}
+function ttTree(){
+  const a=S.ui.tt, st=ttSet(a.set), tiers=ttTiers(a.set,a.piece), npc=TT.npc[tiers[0].npc];
+  const n=tiers.length;
+  return `<p style="margin:0 0 6px;color:var(--soft)">Set Twilight: <b style="color:var(--ink)">${esc(st.title)}</b> · tipo ${esc(st.type)}</p>
+  <div class="note ok"><b>Cómo funciona:</b> cada pieza de nivel superior pide el <b>Souledge</b> de la inferior, y ese Souledge se saca <b>decomponiendo</b> la pieza inferior (se destruye). Esta pieza tiene ${n} nivel${n>1?"es":""}. Se fabrica en <b>${esc(npc.n)}</b> (NPC ${npc.id}; ${esc(npc.w)}).</div>
+  <ul class="tree">${ttItem(a.set,a.piece,0)}</ul>
+  <div class="note">Confirmado en el juego (Evolved): la receta de ★Archangel's Tunic (2 + 8 + 16 + Souledge + 30 Ultimate Substance, 0 coins, pide <b>Tailor Skill</b>). El resto sale de pwdatabase (PWI 1.6.4). En esta base, las armaduras de nivel 90 no piden Souledge; si en Evolved la receta de nivel 90 pide el Souledge del nivel 80, avísame y lo agrego.</div>`;
+}
+function ttSummary(){
+  const a=S.ui.tt, ps=ttPieces(a.scope), tot={};
+  ps.forEach(([s,k])=>{const m=ttNeed(s,k);for(const id in m)tot[id]=(tot[id]||0)+m[id]});
+  const grp={Gold:0,Green:1,Purple:2};
+  const ids=Object.keys(tot).sort((x,y)=>{const gx=grp[TT.mats[x].c]??3,gy=grp[TT.mats[y].c]??3;return gx-gy||TT.mats[x].n.localeCompare(TT.mats[y].n)});
+  const rows=ids.map(id=>{const m=TT.mats[id];return `<tr><td><span class="row">${icon(id,m.n,"mat")}<span>${esc(m.n)}</span></span></td><td class="n">${fmt(tot[id])}</td></tr>`}).join("");
+  const label={piece:"esta pieza",set:`el set ${ttSet(a.set).title} (7 piezas)`,all:"los 3 sets (21 piezas)"}[a.scope];
+  $("#sumBox").innerHTML=`<h2>Materiales que faltan</h2><small>Para ${label}, sin contar lo que marcaste como "ya lo tengo".</small>
+    ${rows?`<table style="margin-top:8px"><tbody>${rows}</tbody></table>`:`<p>No falta nada.</p>`}<hr><small>Orden: dorados, verdes y morados (colores del Excel de TT), luego el resto. En cada material del árbol ves en qué instancia y jefe cae. Cada set necesita su propio casco.</small>`;
+}
+function renderTT(){
+  const a=S.ui.tt, st=ttSet(a.set);
+  $("#ttSetSeg").innerHTML=TT.sets.map(s=>`<button type="button" data-ttset="${s.id}" aria-pressed="${s.id===a.set}">${esc(s.id)} · ${esc(s.type)}</button>`).join("");
+  $("#ttPieceSeg").innerHTML=TT.slots.map(([k,l])=>`<button type="button" data-ttpiece="${k}" aria-pressed="${k===a.piece}">${l}</button>`).join("");
+  $("#ttScope").value=a.scope;
+  $("#treeBox").innerHTML=ttTree();
+  ttSummary();
+}
+
 /* ---- render ---- */
-function render(){
+function renderRD(){
   const {set,slot}=S.ui;
   $("#setSeg").innerHTML=Object.keys(P).map(s=>`<button type="button" data-set="${s}" aria-pressed="${s===set}">${s} · ${P[s].type}</button>`).join("");
   $("#slotSeg").innerHTML=SLOTS.map(([k,l])=>`<button type="button" data-slot="${k}" aria-pressed="${k===slot}">${l}</button>`).join("");
@@ -273,7 +357,19 @@ function render(){
   $("#treeBox").innerHTML=`<p style="margin:0 0 6px;color:var(--soft)">Set Rising Dawn: <b style="color:var(--ink)">${esc(P[set].setName)}</b></p>`+buildTree(set,slot);
   renderSummary();
 }
+
+function render(){
+  const tt=S.ui.mode==="tt";
+  $("#modeSeg").innerHTML=[["rd","Rising Dawn"],["tt","Twilight"]].map(([k,n])=>`<button type="button" data-mode="${k}" aria-pressed="${S.ui.mode===k}">${n}</button>`).join("");
+  $("#rdCtl").style.display=tt?"none":"contents";
+  $("#ttCtl").style.display=tt?"contents":"none";
+  tt?renderTT():renderRD();
+}
 document.addEventListener("click",e=>{
+  const md=e.target.closest("[data-mode]");if(md){S.ui.mode=md.dataset.mode;save();return render()}
+  const ts=e.target.closest("[data-ttset]");if(ts){S.ui.tt.set=ts.dataset.ttset;save();return render()}
+  const tp=e.target.closest("[data-ttpiece]");if(tp){S.ui.tt.piece=tp.dataset.ttpiece;save();return render()}
+  const tg2=e.target.closest("[data-ttg]");if(tg2){const k=tg2.dataset.ttg;collapsed[k]=!collapsed[k];return render()}
   const a=e.target.closest("[data-set]");if(a){S.ui.set=a.dataset.set;save();return render()}
   const b=e.target.closest("[data-slot]");if(b){S.ui.slot=b.dataset.slot;save();return render()}
   const t=e.target.closest("[data-tg]");if(t){const k=t.dataset.tg;collapsed[k]=!collapsed[k];return render()}
@@ -282,8 +378,10 @@ document.addEventListener("change",e=>{
   const el=e.target;
   if(el.dataset.own){ if(el.checked)S.own[el.dataset.own]=true;else delete S.own[el.dataset.own]; save(); return render()}
   if(el.id==="scope"){S.ui.scope=el.value;save();renderSummary()}
+  if(el.id==="ttScope"){S.ui.tt.scope=el.value;save();ttSummary()}
 });
 function setAll(v){ // abrir/cerrar todo en la pieza actual
+  if(S.ui.mode==="tt"){const a=S.ui.tt;ttTiers(a.set,a.piece).forEach((_,i)=>{collapsed[ttKey(a.set,a.piece,i)]=v});return render()}
   const {set,slot}=S.ui; STAGES.forEach(st=>{collapsed[ownKey(set,slot,st)]=v}); render();
 }
 $("#expAll").addEventListener("click",()=>setAll(false));
@@ -296,7 +394,8 @@ let armed=0;
 $("#resetBtn").addEventListener("click",function(){
   if(!armed){this.textContent="¿Seguro? Pulsa otra vez";armed=setTimeout(()=>{this.textContent="Borrar lo marcado";armed=0},4000);return}
   clearTimeout(armed);armed=0;this.textContent="Borrar lo marcado";S.own={};save();render()});
-function fromHash(){const m=location.hash.match(/^#(\w+)\/(\w+)$/);if(m&&P[m[1]]&&SLOTS.some(x=>x[0]===m[2])){S.ui.set=m[1];S.ui.slot=m[2];S.ui.scope="piece"}}
+function fromHash(){const q=location.hash.match(/^#tt\/(\w+)\/(\w+)$/);if(q&&TT.sets.some(s=>s.id===q[1])&&TT.slots.some(x=>x[0]===q[2])){S.ui.mode="tt";S.ui.tt.set=q[1];S.ui.tt.piece=q[2];return}
+  const m=location.hash.match(/^#(\w+)\/(\w+)$/);if(m&&P[m[1]]&&SLOTS.some(x=>x[0]===m[2])){S.ui.mode="rd";S.ui.set=m[1];S.ui.slot=m[2];S.ui.scope="piece"}}
 fromHash();addEventListener("hashchange",()=>{fromHash();render()});
 applyTheme();render();
 </script>
