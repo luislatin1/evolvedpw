@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Guía de equipo · Evolved PW</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;700&family=Shippori+Mincho:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#EDF0EA; --paper2:#E2E8E1; --card:#F7F9F5; --ink:#1E2B30; --soft:#55666B; --line:#C3CEC4;
+  --jade:#2E7D6B; --jadeD:#1F5A4D; --jadeBg:#D5E8DF; --red:#B23A2E; --redBg:#F2DAD5; --amber:#7A5C0F; --amberBg:#F1E7C6;
+  --serif:"Shippori Mincho","Hiragino Mincho ProN","Noto Serif",Georgia,serif;
+  --sans:"Hanken Grotesk",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --paper:#162026; --paper2:#1D2A31; --card:#1F2D34; --ink:#E7ECE4; --soft:#9FB0B2; --line:#33454D;
+    --jade:#63BBA1; --jadeD:#8AD3BD; --jadeBg:#21433B; --red:#E5796A; --redBg:#4A2723; --amber:#D9B857; --amberBg:#40361A;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#162026; --paper2:#1D2A31; --card:#1F2D34; --ink:#E7ECE4; --soft:#9FB0B2; --line:#33454D;
+  --jade:#63BBA1; --jadeD:#8AD3BD; --jadeBg:#21433B; --red:#E5796A; --redBg:#4A2723; --amber:#D9B857; --amberBg:#40361A;
+}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 64px);-webkit-text-size-adjust:100%}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--paper);color:var(--ink);font:400 16px/1.55 var(--sans)}
+a{color:var(--jadeD)}
+h1,h2,h3{font-family:var(--serif);font-weight:700;line-height:1.2;margin:0}
+h1{font-size:clamp(1.9rem,5.5vw,3rem);font-weight:800;letter-spacing:.01em}
+h2{font-size:clamp(1.4rem,3.5vw,1.8rem);margin-bottom:.35rem}
+h3{font-size:1.15rem;margin:1.6rem 0 .5rem}
+p{margin:.4rem 0 .8rem;max-width:68ch}
+small,.soft{color:var(--soft)}
+.wrap{max-width:980px;margin:0 auto;padding:0 18px}
+
+header.top{padding:34px 0 18px;border-bottom:1px solid var(--line)}
+header.top p{font-size:1.05rem;color:var(--soft);margin-top:.6rem}
+.topbar{display:flex;gap:10px;align-items:flex-start;justify-content:space-between;flex-wrap:wrap}
+.btn{font:500 .9rem var(--sans);color:var(--ink);background:transparent;border:1px solid var(--line);border-radius:6px;padding:7px 12px;cursor:pointer}
+.btn:hover{border-color:var(--jade)}
+.btn:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible,.tab:focus-visible{outline:2px solid var(--jade);outline-offset:2px}
+.btn.danger{color:var(--red);border-color:var(--red)}
+
+nav.tabs{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--paper);border-bottom:1px solid var(--line)}
+nav.tabs .wrap{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none}
+.tab{font:500 1rem var(--sans);color:var(--soft);background:none;border:0;border-bottom:3px solid transparent;padding:14px 14px 11px;cursor:pointer;white-space:nowrap}
+.tab[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--jade);font-weight:700}
+
+main{padding:26px 0 70px}
+section.panel[hidden]{display:none}
+
+/* ruta Rank 9 */
+.route{list-style:none;margin:18px 0 8px;padding:0;display:grid;gap:12px;grid-template-columns:repeat(4,1fr);counter-reset:s}
+.route li{position:relative;padding:14px 14px 12px;background:var(--card);border-top:4px solid var(--jade);border-radius:0 0 8px 8px}
+.route li.opt{border-top-color:var(--line);border-top-style:dashed;background:transparent}
+.route li::after{content:"";position:absolute;top:-4px;right:-13px;width:14px;height:4px;background:var(--jade)}
+.route li:last-child::after{display:none}
+.route li.opt::after{background:var(--line)}
+.route b{font-family:var(--serif);font-size:1.35rem;display:block}
+.route .who{font-size:.88rem;color:var(--soft);min-height:2.6em}
+.route .cnt{font-size:.9rem;margin-top:8px;font-weight:700}
+.bar{height:5px;background:var(--paper2);border-radius:3px;margin-top:6px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--jade);width:0;transition:width .25s}
+@media (max-width:760px){
+  .route{grid-template-columns:1fr}
+  .route li::after{display:none}
+}
+
+/* tablas */
+.scroll{overflow-x:auto;margin:.5rem 0 1rem;border:1px solid var(--line);border-radius:6px;background:var(--card)}
+table{border-collapse:collapse;width:100%;font-size:.93rem}
+th,td{padding:8px 10px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+tr:last-child td,tr:last-child th{border-bottom:0}
+thead th{background:var(--paper2);font-weight:700;white-space:nowrap}
+td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
+tbody th{font-weight:500}
+tr.hl td,tr.hl th{background:var(--jadeBg)}
+tfoot td,tfoot th{font-weight:700;background:var(--paper2)}
+.cellck{display:flex;gap:8px;align-items:flex-start;cursor:pointer;min-width:118px}
+.cellck input{margin-top:3px}
+.cellck span small{display:block;line-height:1.3}
+.na{color:var(--soft)}
+
+input[type=checkbox]{width:18px;height:18px;accent-color:var(--jade);flex:none}
+input[type=number],select{font:inherit;color:var(--ink);background:var(--paper);border:1px solid var(--line);border-radius:5px;padding:5px 7px;max-width:110px}
+select{max-width:140px}
+input[disabled]{opacity:.45}
+
+.tool{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:16px 16px 12px;margin:16px 0}
+.tool h3{margin-top:0}
+.row{display:flex;gap:14px;flex-wrap:wrap;align-items:center;margin:.4rem 0}
+.row label{display:flex;gap:7px;align-items:center;font-size:.93rem}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:6px;overflow:hidden}
+.seg button{font:500 .93rem var(--sans);background:transparent;color:var(--soft);border:0;padding:7px 13px;cursor:pointer;border-right:1px solid var(--line)}
+.seg button:last-child{border-right:0}
+.seg button[aria-pressed="true"]{background:var(--jade);color:#fff}
+:root[data-theme="dark"] .seg button[aria-pressed="true"]{color:#10201b}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .seg button[aria-pressed="true"]{color:#10201b}}
+.tag{display:inline-block;font-size:.8rem;padding:1px 8px;border-radius:99px;background:var(--jadeBg);color:var(--jadeD);white-space:nowrap}
+.tag.red{background:var(--redBg);color:var(--red)}
+.tag.amber{background:var(--amberBg);color:var(--amber)}
+.tag.grey{background:var(--paper2);color:var(--soft)}
+.tag.purple{background:#E5DDF1;color:#5B3F8F}
+.tag.green{background:#D7EBCF;color:#2F6A22}
+.tag.gold{background:#F3E3A8;color:#7A5C0F}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .tag.purple{background:#35294d;color:#C9B5EE}:root:not([data-theme="light"]) .tag.green{background:#25401f;color:#A9D99B}:root:not([data-theme="light"]) .tag.gold{background:#4a3d12;color:#E5CB78}}
+
+.note{border-left:4px solid var(--amber);background:var(--amberBg);padding:9px 13px;border-radius:0 6px 6px 0;margin:12px 0;font-size:.93rem;max-width:80ch}
+.note.ok{border-left-color:var(--jade);background:var(--jadeBg)}
+
+details{border-top:1px solid var(--line)}
+details:last-of-type{border-bottom:1px solid var(--line)}
+details>summary{cursor:pointer;padding:13px 2px;list-style:none;display:flex;gap:12px;align-items:center;justify-content:space-between}
+details>summary::-webkit-details-marker{display:none}
+details>summary::before{content:"+";font-family:var(--serif);font-size:1.3rem;width:1.1rem;color:var(--jade);flex:none}
+details[open]>summary::before{content:"−"}
+details>summary .t{font-family:var(--serif);font-weight:700;font-size:1.2rem;flex:1}
+details>summary .p{font-size:.88rem;color:var(--soft);white-space:nowrap}
+details>.body{padding:2px 2px 18px 26px}
+@media (max-width:560px){details>.body{padding-left:2px}}
+
+.checks{list-style:none;margin:.3rem 0 1rem;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(235px,1fr));gap:2px 16px}
+.checks label{display:flex;gap:8px;align-items:flex-start;padding:4px 0;cursor:pointer;font-size:.95rem}
+.checks input{margin-top:3px}
+.checks input:checked+span{color:var(--soft);text-decoration:line-through;text-decoration-color:var(--jade)}
+.checks small{display:block}
+
+.lg-group{margin:1.2rem 0 0}
+.lg-group h3{margin:.2rem 0 .3rem;font-size:1.05rem}
+.lg-list{list-style:none;margin:0;padding:0;border:1px solid var(--line);border-radius:6px;background:var(--card)}
+.lg-list li{display:flex;gap:10px;align-items:flex-start;padding:8px 12px;border-bottom:1px solid var(--line)}
+.lg-list li:last-child{border-bottom:0}
+.lg-list label{display:flex;gap:10px;align-items:flex-start;flex:1;cursor:pointer}
+.lg-list input:checked~.nm{color:var(--soft);text-decoration:line-through;text-decoration-color:var(--jade)}
+.lg-list .nm{flex:1}
+.lg-list .meta{font-size:.88rem;color:var(--soft);display:block}
+.sums{display:flex;gap:10px;flex-wrap:wrap;margin:.6rem 0 0}
+.sums div{border:1px solid var(--line);border-radius:6px;padding:7px 12px;background:var(--card);min-width:110px}
+.sums b{display:block;font-family:var(--serif);font-size:1.35rem;line-height:1.15}
+.sums span{font-size:.85rem;color:var(--soft)}
+.big{font-family:var(--serif);font-size:1.6rem;font-weight:800}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;font-size:.95rem}
+.kv dt{color:var(--soft)}
+.kv dd{margin:0}
+footer{border-top:1px solid var(--line);padding:18px 0 40px;color:var(--soft);font-size:.9rem}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+.sitenav{background:var(--paper2);border-bottom:1px solid var(--line)}
+.sitenav .wrap{display:flex;gap:4px 12px;flex-wrap:wrap;align-items:center;padding-top:7px;padding-bottom:7px}
+.sitenav a{color:var(--soft);text-decoration:none;font-size:.9rem;font-weight:500;padding:3px 10px;border-radius:6px}
+.sitenav a:hover{color:var(--ink);background:var(--card)}
+.sitenav a[aria-current="page"]{background:var(--jadeBg);color:var(--jadeD);font-weight:700}
+.sitenav .lbl{font-size:.8rem;color:var(--soft)}
+</style>
+</head>
+<body>
+<nav class="sitenav" aria-label="Páginas del gremio"><div class="wrap"><span class="lbl">Evolved PW:</span><a href="guia-equipo-evolved.html" aria-current="page">Guía de equipo</a><a href="titulos-piezas.html">Títulos → piezas</a><a href="arbol-recetas-rising-dawn.html">Árbol de recetas</a></div></nav>
+
+<header class="top">
+  <div class="wrap">
+    <div class="topbar">
+      <h1>Guía de equipo<br>Evolved PW</h1>
+      <div class="row">
+        <button class="btn" id="themeBtn" type="button">Cambiar tema</button>
+        <button class="btn danger" id="resetBtn" type="button">Borrar mi progreso</button>
+      </div>
+    </div>
+    <p>Qué necesitas, cuánto cuesta y qué te falta: Rank 9, glifos, títulos y legendarios. Marca lo que ya tienes y la guía calcula el resto. Tu progreso se guarda solo en este navegador, así que cada miembro del gremio lleva el suyo.</p>
+  </div>
+</header>
+
+<nav class="tabs" aria-label="Secciones">
+  <div class="wrap" role="tablist">
+    <button class="tab" role="tab" data-tab="r9">Rank 9</button>
+    <button class="tab" role="tab" data-tab="glyph">Glifos</button>
+    <button class="tab" role="tab" data-tab="legend">Legendarios</button>
+    <button class="tab" role="tab" data-tab="titles">Títulos</button>
+    <button class="tab" role="tab" data-tab="about">Fuentes y pendientes</button>
+  </div>
+</nav>
+
+<main class="wrap">
+  <section class="panel" id="p-r9"></section>
+  <section class="panel" id="p-glyph"></section>
+  <section class="panel" id="p-legend"></section>
+  <section class="panel" id="p-titles"></section>
+  <section class="panel" id="p-about"></section>
+</main>
+
+<footer><div class="wrap">Guía hecha por el gremio, con datos del Excel de títulos y de PWI oficial (pwdatabase.com). Los precios son referencias editables y cambian con el mercado.</div></footer>
+
+<script>
+/*LEGENDARY_DATA*/
+const LEG = {"arm": [{"title": "Legendary Novice I", "items": [{"name": "Heavy Plate of Lava", "type": "honor_shadow", "qty": 4}, {"name": "Heavy Plate of Panthom", "type": "honor_shadow", "qty": 4}, {"name": "Dragonflame Plate", "type": "honor_shadow", "qty": 4}, {"name": "Proud Plate of Corsair", "type": "chips", "qty": 34}, {"name": "Plate of the Vigiliant", "type": "mold", "boss": "Trap Master Fierce; Hellfire Abomination;Queen of Agony, Xipher", "cave": "Seat of Torment"}, {"name": "Plate of Demon Lord", "type": "honor_shadow", "qty": 4}]}, {"title": "Legendary Novice II", "items": [{"name": "Vicius Cuisse", "type": "honor_shadow", "qty": 4}, {"name": "Cuisses of Divine Beast", "type": "chips", "qty": 26}, {"name": "Cuisses of Seat Captain", "type": "chips", "qty": 33}, {"name": "Cuisses of Brahma", "type": "chips", "qty": 37}, {"name": "Cuisses of Hamadryad", "type": "mold", "boss": "TM Seat o Abaddon 5 medalla (%3,57)", "cave": null, "drop": 3.57, "dropSrc": "Excel"}, {"name": "Shinguards of Wolf Rage", "type": "honor_shadow", "qty": 4}, {"name": "Zombie Warrior Leggings", "type": "honor_shadow", "qty": 4}, {"name": "Genie Shins", "type": "chips", "qty": 26}]}, {"title": "Legendary Novice III", "items": [{"name": "Dark Shinguards of Hades", "type": "chips", "qty": 29}, {"name": "Demon Punisher Cuisse", "type": "honor_shadow", "qty": 4}, {"name": "Pants of Fire's Fury", "type": "honor_shadow", "qty": 4}, {"name": "Fine Emerald Slacks", "type": "honor_shadow", "qty": 4}, {"name": "Pants of Dragon Scales", "type": "mold", "boss": "Myriadtail Wyvern", "cave": "Secret Frostcover Undergrounds"}, {"name": "Dark Pants of Hades", "type": "chips", "qty": 30}, {"name": "Demonvision Legs", "type": "mold", "boss": "TM Seat o Abaddon 5 medalla (%3,57)", "cave": null, "drop": 3.57, "dropSrc": "Excel"}]}, {"title": "Legendary Novice IV", "items": [{"name": "Soul Devourer's Greaves", "type": "honor_shadow", "qty": 4}, {"name": "Greaves of Fallen", "type": "mold", "boss": "TM Eden o Brimstone 5 medalla (%6,25)", "cave": null, "drop": 6.25, "dropSrc": "Excel"}, {"name": "Scribe's Shoes", "type": "mold", "boss": "Voidweaver", "cave": "Seat of Torment"}, {"name": "Thromh's Boots", "type": "honor_shadow", "qty": 4}, {"name": "Boots of Tiger Stregth", "type": "mold", "boss": "Fushma-Hexocelot Lietenant", "cave": "Secret Frostcover Undergrounds"}, {"name": "Light Boots of Hermit", "type": "mold", "boss": "Thom Mundan", "cave": "Abaddon"}, {"name": "Boots of Dvinity", "type": "honor_shadow", "qty": 4}, {"name": "Boots of Shadow Fountain", "type": "mold", "boss": "Farren Sereneti", "cave": "Gate of Delirium"}]}, {"title": "Legendary Novice V", "items": [{"name": "Warrior's Clutches", "type": "honor_shadow", "qty": 4}, {"name": "Inferno Bracers", "type": "mold", "boss": "Calcid of the Flame", "cave": "Gate of Delirium"}, {"name": "Heavy Vambraces of Hermit", "type": "mold", "boss": "Gaurnob Cloister guard", "cave": "Abaddon"}, {"name": "Blood Bracers of Fang", "type": "chips", "qty": 33}, {"name": "Bracers of Abandonment", "type": "mold", "boss": "Monoblat Dracoboa", "cave": "Abaddon"}, {"name": "Soul of Purify Bracers", "type": "honor_shadow", "qty": 4}, {"name": "Sleeves of Sea Captain", "type": "chips", "qty": 33}, {"name": "Sleeves of Demon Sword", "type": "mold", "boss": "Rancid Venerator", "cave": "Seat of Torment"}]}], "wep": [{"title": "Legendary Sword Master", "items": [{"name": "Sword of Burnig Clouds", "type": "honor_light", "qty": 2}, {"name": "Eagle's Claw", "type": "honor_light", "qty": 3}, {"name": "Shady Blade", "type": "honor_light", "qty": 5}, {"name": "Illusive Lunar Cutlass", "type": "chips", "qty": 51}, {"name": "Brahma's Lash", "type": "mold", "boss": "Phlebo", "cave": "Eden", "drop": 1.12, "dropSrc": "pwdatabase", "moldId": 12989}, {"name": "Demonic Rebuttal", "type": "mold", "boss": "Harpy Wraith", "cave": null}, {"name": "Ghost of Retribution", "type": "mold", "boss": "Harpy Wraith", "cave": null}]}, {"title": "Legendary Spear Master", "items": [{"name": "Sound Chaser", "type": "honor_light", "qty": 6}, {"name": "Ghoul Bane", "type": "honor_shadow", "qty": 4}, {"name": "Massive Champion", "type": "chips", "qty": 68}, {"name": "Dragon's Bite", "type": "mold", "boss": "Trap  Master Fierce; Hellfire Abomination; Queen Agony, Xipher", "cave": "Seat of Tormen"}]}, {"title": "Legendary Fist Master", "items": [{"name": "Radiant Fist", "type": "honor_light", "qty": 2}, {"name": "Fist of the Arch Devil", "type": "honor_light", "qty": 5}, {"name": "Lotus Malevolence", "type": "honor_light", "qty": 6}, {"name": "Annihilator of Souls", "type": "chips", "qty": 51}, {"name": "Dark Flash", "type": "chips", "qty": 59}, {"name": "Dragonfly Assault Blade", "type": "honor_shadow", "qty": 5}, {"name": "Fist of Heroism", "type": "mold", "boss": "Peachblossom Ritualist", "cave": "Abaddon"}]}, {"title": "Legendary Axe Master", "items": [{"name": "Poleaxe of the Righteous", "type": "honor_light", "qty": 2}, {"name": "Handaxes of Demonic Roar", "type": "honor_light", "qty": 3}, {"name": "Xeno's Sledgehammer", "type": "honor_light", "qty": 5}, {"name": "Gale Dual Hammers", "type": "honor_light", "qty": 6}, {"name": "Hefty Poleaxe of Giants", "type": "chips", "qty": 51}, {"name": "Calamity Axes of Blood", "type": "chips", "qty": 59}, {"name": "Cudgel of Ancient Alloy", "type": "chips", "qty": 68}, {"name": "Cudgel of the Barbarian Lord", "type": "honor_shadow", "qty": 4}]}, {"title": "Legendary Magician", "items": [{"name": "Flame Wand", "type": "honor_light", "qty": 2}, {"name": "Mirage Sword", "type": "honor_light", "qty": 2}, {"name": "Order of the Stars", "type": "honor_light", "qty": 3}, {"name": "Wheel of Fate", "type": "honor_light", "qty": 5}, {"name": "Fine Pataka of Bodhi", "type": "honor_light", "qty": 6}, {"name": "Dragon's Will", "type": "honor_shadow", "qty": 3}, {"name": "Sakyamuni's Light", "type": "chips", "qty": 59}]}, {"title": "Legendary Wizard", "items": [{"name": "Requiem Blade", "type": "chips", "qty": 75}, {"name": "Midnight Black", "type": "mold", "boss": "Peachblossom Ritualist", "cave": "Abaddon"}, {"name": "Demon Thunder", "type": "mold", "boss": "Harpy Wraith", "cave": null}, {"name": "Ghost Figure", "type": "mold", "boss": "Harpy Wraith", "cave": null}, {"name": "Aura of Buddha", "type": "nodata", "boss": null, "cave": null}, {"name": "Glaives of Divinity", "type": "chips", "qty": 67}]}, {"title": "Legendary Archer", "items": [{"name": "Moonliht Bow", "type": "honor_light", "qty": 2}, {"name": "Lightcatcher", "type": "honor_light", "qty": 3}, {"name": "Sinister Shooter", "type": "honor_light", "qty": 5}, {"name": "The Penetrator", "type": "honor_light", "qty": 6}, {"name": "Solarslayer", "type": "honor_shadow", "qty": 3}, {"name": "Wind of the Clouds", "type": "chips", "qty": 59}, {"name": "Guardian of the Realm", "type": "honor_shadow", "qty": 5}, {"name": "Windcatcher", "type": "chips", "qty": 76}]}, {"title": "Legendary Assassin", "items": [{"name": "Soulreaper Blade", "type": "honor_light", "qty": 2}, {"name": "Screamer Dual Thorns", "type": "honor_light", "qty": 3}, {"name": "Dissector Dagger", "type": "honor_light", "qty": 5}, {"name": "Cloud Thorn", "type": "honor_light", "qty": 6}, {"name": "Evilstare Dual Daggers", "type": "chips", "qty": 76}, {"name": "Shadow Legend", "type": "chips", "qty": 81}, {"name": "Glowfall Wings", "type": "chips", "qty": 88}, {"name": "Mentalevil Thorn", "type": "mold", "boss": "Harpy Wraith", "cave": null}]}]};
+
+/* ---------- utilidades y estado ---------- */
+const KEY="pwguide-evolved-v1";
+let S={checks:{},have:{},price:{},mode:{},ui:{}};
+let memoryOnly=false;
+function load(){
+  try{const r=localStorage.getItem(KEY); if(r){const o=JSON.parse(r); S=Object.assign({checks:{},have:{},price:{},mode:{},ui:{}},o);}}
+  catch(e){memoryOnly=true;}
+}
+function save(){ try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){memoryOnly=true;} }
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const fmt=(n,d=0)=>Number(n).toLocaleString("es",{maximumFractionDigits:d});
+const $=(s,el=document)=>el.querySelector(s);
+const $$=(s,el=document)=>[...el.querySelectorAll(s)];
+const pct=(a,b)=>b?Math.round(100*a/b):0;
+
+/* ---------- RANK 9 ---------- */
+const STAGES=[["r91","R9.1"],["r92","R9.2"],["r94","R9.4"]];
+const PIECES=[
+ {id:"ring",es:"Anillo",en:"Ring of Trauma",r91:{gst:32,mog:3}},
+ {id:"belt",es:"Cinturón",en:"Belt",r91:{gst:32,mog:3},r92:{st:1},r94:{seal:117,ori:6}},
+ {id:"robe",es:"Túnica",en:"Robe",r91:{gst:14,mog:2},r92:{st:1},r94:{seal:80,ori:1}},
+ {id:"pants",es:"Pantalones",en:"Pants",r91:{gst:14,mog:2},r92:{st:1},r94:{seal:80,ori:1}},
+ {id:"gloves",es:"Guantes",en:"Gloves",r91:{gst:14,mog:2},r92:{st:1},r94:{seal:80,ori:1}},
+ {id:"boots",es:"Botas",en:"Boots",r91:{gst:14,mog:2},r92:{st:1},r94:{seal:80,ori:1}},
+ {id:"weapon",es:"Arma",en:"Tu arma",r91:{gst:85,mog:5},r92:{st:4},r94:{seal:578,ori:36,fee:90}}
+];
+const DEF={gst:4.7,mog:200,st:200,seal:12,ori:60,supply:0.2};
+const DEFMODE={st:"make",seal:"buy",ori:"make"};
+const ROWS=[
+ {k:"gst",label:"General Summer's Token (GST)"},
+ {k:"mog",label:"Medal of Glory (MoG)"},
+ {k:"st",label:"Summerwind Token",mode:true,per:540,fixed:0},
+ {k:"seal",label:"Sovereign's Seal",mode:true,per:500,fixed:5},
+ {k:"ori",label:"Orichalcum Ingot",mode:true,per:250,fixed:10}
+];
+const P=k=>S.price[k]??DEF[k];
+const MODE=k=>S.mode[k]??DEFMODE[k];
+const ck=(p,s)=>!!S.checks[`r9:${p}:${s}`];
+function stageText(p,s){
+  const o=p[s]; if(!o) return null;
+  const t=[];
+  if(o.gst) t.push(`${o.gst} GST`); if(o.mog) t.push(`${o.mog} MoG`);
+  if(o.st) t.push(`${o.st} Summerwind`); if(o.seal) t.push(`${o.seal} Seals`);
+  if(o.ori) t.push(`${o.ori} Orichalcum`); if(o.fee) t.push(`${o.fee}M de tarifa`);
+  return t.join(" + ");
+}
+function r9Count(stage){
+  const ps=PIECES.filter(p=>p[stage]);
+  return [ps.filter(p=>ck(p.id,stage)).length, ps.length];
+}
+function r9Needs(){
+  const target=S.ui.target||"r94";
+  const upto=STAGES.findIndex(s=>s[0]===target);
+  const n={gst:0,mog:0,st:0,seal:0,ori:0,fee:0};
+  PIECES.forEach(p=>STAGES.slice(0,upto+1).forEach(([s])=>{
+    if(!p[s]||ck(p.id,s)) return;
+    for(const k in p[s]) n[k]+=p[s][k];
+  }));
+  return n;
+}
+function renderR9(){
+  const target=S.ui.target||"r94";
+  const tIdx=STAGES.findIndex(s=>s[0]===target);
+  const st=(id)=>{const [a,b]=r9Count(id);return `<div class="cnt">${a} de ${b} piezas</div><div class="bar"><i style="width:${pct(a,b)}%"></i></div>`;};
+  const head=STAGES.slice(0,tIdx+1).map(([id,l])=>`<th>${l}</th>`).join("");
+  const rows=PIECES.map(p=>{
+    const cells=STAGES.slice(0,tIdx+1).map(([s,l])=>{
+      const t=stageText(p,s);
+      if(!t) return `<td class="na">no aplica</td>`;
+      return `<td><label class="cellck"><input type="checkbox" data-r9="${p.id}|${s}" ${ck(p.id,s)?"checked":""}><span>${l} hecho<small>${esc(t)}</small></span></label></td>`;
+    }).join("");
+    return `<tr><th scope="row">${p.es}<small class="soft"> ${esc(p.en)}</small></th>${cells}</tr>`;
+  }).join("");
+  const priceRows=ROWS.map(r=>`
+    <tr data-k="${r.k}">
+      <th scope="row">${r.label}</th>
+      <td class="n need"></td>
+      <td class="n"><input type="number" min="0" step="1" data-have="${r.k}" value="${S.have[r.k]??0}" aria-label="Tengo ${esc(r.label)}"></td>
+      <td class="n gap"></td>
+      <td>${r.mode?`<select data-mode="${r.k}" aria-label="Cómo conseguir ${esc(r.label)}"><option value="buy">Comprar</option><option value="make">Fabricar</option></select>`:`<span class="na">Comprar</span>`}</td>
+      <td class="n"><input type="number" min="0" step="0.1" data-price="${r.k}" value="${P(r.k)}" aria-label="Precio de compra de ${esc(r.label)} en millones"></td>
+      <td class="n unit"></td>
+      <td class="n cost"></td>
+    </tr>`).join("");
+  $("#p-r9").innerHTML=`
+    <h2>Rank 9: de R9.1 a R9.4</h2>
+    <p>Necesitas 300.000 de reputación para empezar. Se consigue con Perfect Token of Luck → Wraith Officer's Badge (agente de PWI Boutique) o con compras de cubi.</p>
+    <ol class="route" aria-label="Ruta de mejora">
+      <li><b>R9.1</b><div class="who">Intercambio en Commander-in-Chief (Archosaur 1k). El Ring of Trauma se compra primero y desbloquea el resto.</div>${st("r91")}</li>
+      <li><b>R9.2</b><div class="who">Commander-in-Chief, pestaña "Rank 9 Gear Upgrade". Pide la pieza R9.1 y 1 Summerwind Token (4 el arma).</div>${st("r92")}</li>
+      <li class="opt"><b>R9.3</b><div class="who">Opcional (ruta B): Peerless Forge en Lunar/Warsong. Solo cuenta si no vas directo a R9.4.</div><div class="cnt soft">No se calcula aquí</div></li>
+      <li><b>R9.4</b><div class="who">North Arch Forges con Sovereign's Seals y Orichalcum, directo desde R9.2.</div>${st("r94")}</li>
+    </ol>
+
+    <div class="tool">
+      <h3>Tu plan</h3>
+      <div class="row"><span>Quiero llegar hasta</span>
+        <div class="seg" role="group" aria-label="Meta">
+          ${STAGES.map(([id,l])=>`<button type="button" data-target="${id}" aria-pressed="${id===target}">${l}</button>`).join("")}
+        </div>
+      </div>
+      <p class="soft">Marca cada etapa que ya hiciste. Si marcas R9.4, las anteriores se marcan solas.</p>
+      <div class="scroll"><table><thead><tr><th>Pieza</th>${head}</tr></thead><tbody>${rows}</tbody></table></div>
+    </div>
+
+    <div class="tool">
+      <h3>Qué te falta y cuánto cuesta</h3>
+      <div class="row"><label>Valor de 1 Supply Token (M) <input type="number" min="0" step="0.05" data-price="supply" value="${P("supply")}"></label></div>
+      <div class="scroll"><table>
+        <thead><tr><th>Material</th><th class="n">Necesario</th><th class="n">Tengo</th><th class="n">Falta</th><th>Cómo</th><th class="n">Precio compra (M)</th><th class="n">Costo c/u (M)</th><th class="n">Costo (M)</th></tr></thead>
+        <tbody>${priceRows}</tbody>
+        <tfoot>
+          <tr id="feeRow"><th scope="row" colspan="7">Tarifa (fee) de forja del arma</th><td class="n" id="feeCost">0</td></tr>
+          <tr><th scope="row" colspan="7">Total estimado (millones)</th><td class="n" id="totalCost">0</td></tr>
+          <tr><th scope="row" colspan="7">Supply Tokens que gastas al fabricar</th><td class="n" id="totalSupply">0</td></tr>
+        </tfoot>
+      </table></div>
+      <div class="note">La tarifa del arma (90M) está confirmada en el juego. La del cinturón y la armadura en R9.4 todavía no está confirmada y no se suma.</div>
+      <p class="soft">Referencias de Fabricar: 1 Summerwind Token = 540 Supply Tokens (1.200 Uncanny + 300 Rapture; 1 Supply Token da 5 Uncanny o 1 Rapture). 1 Seal = 500 Supply Tokens + 5M. 1 Orichalcum = 250 Supply Tokens + 10M. Los precios por defecto son los del mercado el 28/09/2026: GST 4,7M, MoG 200M, Seal 12M.</p>
+    </div>
+
+    <details><summary><span class="t">De dónde sacar cada material</span></summary><div class="body">
+      <div class="scroll"><table>
+        <thead><tr><th>Material</th><th>Cómo conseguirlo</th></tr></thead><tbody>
+        <tr><th scope="row">GST</th><td>Event Shop con Event Gold (dailies y voto), otros jugadores, o fabricarlo con el NPC General Summer (521, 630) usando Mysterious Chips. Referencia de la guía: 9–11 mil por unidad.</td></tr>
+        <tr><th scope="row">Medal of Glory</th><td>Event Shop o jugadores.</td></tr>
+        <tr><th scope="row">Summerwind Token</th><td>NPC Celestial General (1k, @129,855): 500 Wedding Candy = 1 token, o 1.200 Uncanny + 300 Rapture = 1 token. No lo compres en el Event Shop (12 Event Gold, es caro).</td></tr>
+        <tr><th scope="row">Wedding Candy</th><td>Perfect Token of Luck → Wine; el NPC Eldest Matchmaker cambia 2 Wine por 1 Candy.</td></tr>
+        <tr><th scope="row">Seals y Orichalcum</th><td>Cauldron of Contemplation con Supply Tokens (BH/MBH, EU, JFSP), o comprándolos a otros jugadores.</td></tr>
+      </tbody></table></div>
+      <h3>Precios en el Event Shop</h3>
+      <div class="scroll"><table><thead><tr><th>Item</th><th class="n">Event Gold</th></tr></thead><tbody>
+        <tr><td>Medal of Glory</td><td class="n">10</td></tr>
+        <tr><td>General Summer's Token ×10</td><td class="n">5</td></tr>
+        <tr><td>Summerwind Token</td><td class="n">12</td></tr>
+        <tr><td>Quadium Crystal</td><td class="n">2 y 50 de plata</td></tr>
+        <tr><td>Wishalloy Bar</td><td class="n">2 y 50 de plata</td></tr>
+        <tr><td>Orichalcum Ingot ×5</td><td class="n">2</td></tr>
+        <tr><td>Adamantine Powder ×20</td><td class="n">2</td></tr>
+      </tbody></table></div>
+    </div></details>
+
+    <details><summary><span class="t">Ruta B: pasar por R9.3 antes de R9.4</span></summary><div class="body">
+      <p><b>R9.2 → R9.3</b> (Peerless Forge en Lunar/Warsong), por pieza: Mold + 4 EoD + 30 Basic Badges. El arma pide Mold + 4 EoO + 60 Badges. Los EoD cuestan 10–15M, los EoO unos 200M. Los Badges y Molds se farmean y no se pueden comerciar (FWS, JFSP, neo-Lunar).</p>
+      <p><b>R9.3 → R9.4</b> (North Arch Forges): cada pieza de armadura pide 10 Wishalloy Bar + 200 Adamantine Powder, y el cinturón 10 Quadium Crystal. Todo sale del Event Shop con Event Gold.</p>
+    </div></details>
+  `;
+  const sel=(k)=>{const e=$(`select[data-mode="${k}"]`); if(e) e.value=MODE(k);};
+  ["st","seal","ori"].forEach(sel);
+  paintR9();
+}
+function paintR9(){
+  const n=r9Needs(); const sv=P("supply");
+  let total=0,supply=0;
+  ROWS.forEach(r=>{
+    const tr=$(`tr[data-k="${r.k}"]`); if(!tr) return;
+    const need=n[r.k], have=+S.have[r.k]||0, gap=Math.max(0,need-have);
+    const make=r.mode&&MODE(r.k)==="make";
+    const unit=make? r.per*sv+r.fixed : P(r.k);
+    const cost=gap*unit;
+    $(".need",tr).textContent=fmt(need); $(".gap",tr).textContent=fmt(gap);
+    $(".unit",tr).textContent=fmt(unit,2); $(".cost",tr).textContent=fmt(cost,1);
+    const pi=$("[data-price]",tr); pi.disabled=make;
+    total+=cost; if(make) supply+=gap*r.per;
+  });
+  $("#feeCost").textContent=fmt(n.fee);
+  total+=n.fee;
+  $("#totalCost").textContent=fmt(total,1);
+  $("#totalSupply").textContent=fmt(supply);
+}
+
+/* ---------- GLIFOS ---------- */
+const GL={2:[3],3:[9,3],4:[54,18,6],5:[216,72,24,4],6:[864,288,96,16,4],7:[5184,1728,576,96,24,6],8:[25920,8640,2880,480,120,30,5],9:[129600,43200,14400,2400,600,150,25,5],10:[648000,216000,72000,12000,3000,750,125,25,5]};
+const GSTEP={2:"3 de Lv1",3:"3 de Lv2",4:"6 de Lv3",5:"4 de Lv4",6:"4 de Lv5",7:"6 de Lv6",8:"5 de Lv7",9:"5 de Lv8",10:"5 de Lv9"};
+function renderGlyph(){
+  const lv=S.ui.glv||6;
+  const lv1=S.price.glyph1??(5/3);
+  const need=GL[lv];
+  const body=Object.keys(GL).map(L=>`<tr class="${+L===lv?"hl":""}"><th scope="row">Lv ${L}</th>${[0,1,2,3,4,5,6,7,8].map(i=>`<td class="n">${GL[L][i]!==undefined?fmt(GL[L][i]):""}</td>`).join("")}<td class="n">${fmt(GL[L][0]*lv1,0)}M</td></tr>`).join("");
+  $("#p-glyph").innerHTML=`
+    <h2>Combinar glifos</h2>
+    <p>Cada nivel se hace juntando glifos de los niveles anteriores. Elige el nivel que quieres y mira cuántos glifos de cada nivel necesitas en total.</p>
+    <div class="tool">
+      <div class="row"><span>Quiero hacer un glifo</span>
+        <div class="seg" role="group" aria-label="Nivel objetivo">${Object.keys(GL).map(L=>`<button type="button" data-glv="${L}" aria-pressed="${+L===lv}">Lv ${L}</button>`).join("")}</div>
+      </div>
+      <p>Para <b>un glifo Lv ${lv}</b> necesitas: ${need.map((x,i)=>`<b>${fmt(x)}</b> de Lv${i+1}`).join(", ")}.</p>
+      <p class="soft">Último paso: ${GSTEP[lv]} (${lv-1}→${lv}). Los pasos Lv1→2 y Lv2→3 son 3:1, Lv3→4 es 6:1, Lv4→5 y Lv5→6 son 4:1, Lv6→7 es 6:1 y de Lv7 en adelante 5:1.</p>
+      <div class="row"><label>Valor de un glifo Lv1 (M) <input type="number" min="0" step="0.01" data-price="glyph1" value="${+lv1.toFixed(3)}"></label>
+      <span>Valor en materiales de un Lv${lv}: <b>${fmt(need[0]*lv1,0)}M</b></span></div>
+    </div>
+    <div class="scroll"><table>
+      <thead><tr><th>Para hacer</th>${[1,2,3,4,5,6,7,8,9].map(i=>`<th class="n">Lv${i}</th>`).join("")}<th class="n">Valor</th></tr></thead>
+      <tbody>${body}</tbody>
+    </table></div>
+    <p class="soft">El valor usa el precio de un Lv1 que ves arriba (por defecto 5M por 3, es decir 1,67M). Los packs se venden a 5M el Lv2 y 15M el Lv3.</p>
+    <div class="tool">
+      <h3>¿Vender el Lv6 o los packs?</h3>
+      <p>Un Lv6 cuesta 1.440M en materiales y se vende por 6 cubi. Si 1 cubi vale más de 240M, conviene combinar y vender el Lv6. Si vale menos, conviene vender los packs Lv2/Lv3.</p>
+      <div class="row"><label>1 cubi vale (M) <input type="number" min="0" step="10" data-price="cubi" value="${S.price.cubi??""}" placeholder="ej. 250"></label><b id="cubiAns"></b></div>
+    </div>`;
+  paintCubi();
+}
+function paintCubi(){
+  const e=$("#cubiAns"); if(!e) return;
+  const c=S.price.cubi; if(!c){e.textContent="";return;}
+  const v=6*c;
+  e.textContent= v>1440? `6 cubi = ${fmt(v)}M: conviene combinar y vender el Lv6.` : v<1440? `6 cubi = ${fmt(v)}M: conviene vender los packs.` : "Da lo mismo.";
+}
+
+/* ---------- LEGENDARIOS ---------- */
+const TYPE_LABEL={honor_light:"Honor de la Luz",honor_shadow:"Honor de la Sombra",chips:"Mysterious Chips",mold:"Molde de jefe",nodata:"Sin datos"};
+function legItemId(kind,g,i){return `lg:${kind}:${g}:${i}`;}
+function renderLegend(){
+  const kind=S.ui.lkind||"arm"; const filt=S.ui.lfilt||"all";
+  const groups=LEG[kind];
+  const sum={honor_light:0,honor_shadow:0,chips:0,mold:0}; let done=0,total=0;
+  groups.forEach((g,gi)=>g.items.forEach((it,ii)=>{
+    total++; if(S.checks[legItemId(kind,gi,ii)]){done++;return;}
+    if(it.type==="mold") sum.mold++; else if(sum[it.type]!==undefined) sum[it.type]+=it.qty;
+  }));
+  const list=groups.map((g,gi)=>{
+    const items=g.items.map((it,ii)=>({it,ii})).filter(({it})=>filt==="all"||(filt==="cost"&&(it.type.startsWith("honor")||it.type==="chips"))||(filt==="mold"&&(it.type==="mold"||it.type==="nodata")));
+    if(!items.length) return "";
+    return `<div class="lg-group"><h3>${esc(g.title)}</h3><ul class="lg-list">${items.map(({it,ii})=>{
+      const id=legItemId(kind,gi,ii);
+      let tag="",meta="";
+      if(it.type==="mold"){
+        tag=`<span class="tag red">Molde de jefe</span>`;
+        meta=`${esc(it.boss)}${it.cave?` · ${esc(it.cave)}`:""}`;
+        if(it.drop){ const p=it.drop/100; meta+=`<br>Probabilidad ${fmt(it.drop,2)}% (${it.dropSrc==="pwdatabase"?"PWI oficial":"Excel"}) · promedio ${fmt(1/p)} kills, 50% de suerte en ${fmt(Math.ceil(Math.log(.5)/Math.log(1-p)))}`; }
+        else meta+=`<br>Probabilidad pendiente de consultar`;
+      } else if(it.type==="nodata"){ tag=`<span class="tag grey">Sin datos</span>`; }
+      else if(it.type==="chips") tag=`<span class="tag amber">${fmt(it.qty)} Mysterious Chips</span>`;
+      else tag=`<span class="tag">${it.qty} ${TYPE_LABEL[it.type]}</span>`;
+      return `<li><label><input type="checkbox" data-lg="${id}" ${S.checks[id]?"checked":""}><span class="nm">${esc(it.name)}<span class="meta">${meta}</span></span></label>${tag}</li>`;
+    }).join("")}</ul></div>`;
+  }).join("");
+  $("#p-legend").innerHTML=`
+    <h2>Títulos Legendary</h2>
+    <p>Son los más difíciles. Cada pieza se consigue con Honor Divino, con Mysterious Chips o con un molde que cae de un jefe. Los moldes son el cuello de botella, porque dependen de la suerte.</p>
+    <div class="row">
+      <div class="seg" role="group" aria-label="Tipo">
+        <button type="button" data-lkind="arm" aria-pressed="${kind==="arm"}">Armadura (herrero)</button>
+        <button type="button" data-lkind="wep" aria-pressed="${kind==="wep"}">Armas</button>
+      </div>
+      <div class="seg" role="group" aria-label="Filtro">
+        <button type="button" data-lfilt="all" aria-pressed="${filt==="all"}">Todo</button>
+        <button type="button" data-lfilt="cost" aria-pressed="${filt==="cost"}">Honor y Chips</button>
+        <button type="button" data-lfilt="mold" aria-pressed="${filt==="mold"}">Moldes</button>
+      </div>
+    </div>
+    <p class="soft">Llevas ${done} de ${total} piezas. Lo que te falta:</p>
+    <div class="sums">
+      ${kind==="wep"?`<div><b>${fmt(sum.honor_light)}</b><span>Honor de la Luz</span></div>`:""}
+      <div><b>${fmt(sum.honor_shadow)}</b><span>Honor de la Sombra</span></div>
+      <div><b>${fmt(sum.chips)}</b><span>Mysterious Chips</span></div>
+      <div><b>${fmt(sum.mold)}</b><span>Moldes de jefe</span></div>
+    </div>
+    ${list}
+    <div class="tool">
+      <h3>Calculadora de kills para un molde</h3>
+      <p>Pon la probabilidad de drop del jefe y mira cuántas veces tendrías que matarlo.</p>
+      <div class="row"><label>Probabilidad (%) <input type="number" min="0.01" step="0.01" id="dropIn" value="${S.ui.drop??1.12}"></label></div>
+      <dl class="kv" id="dropOut"></dl>
+      <p class="soft">Ejemplo real: el molde de Brahma's Lash cae de Phlebo (Eden, nivel 93) con 1,12%, según la base de datos de PWI.</p>
+    </div>
+    <div class="note">Los Mysterious Chips también sirven para fabricar GST con el NPC General Summer. Si vas por Rank 9 y por Legendary a la vez, decide primero en qué los gastas.</div>`;
+  paintDrop();
+}
+function paintDrop(){
+  const e=$("#dropOut"); if(!e) return;
+  const p=(+(S.ui.drop??1.12)||0)/100; if(!(p>0&&p<1)){e.innerHTML="";return;}
+  const n=q=>Math.ceil(Math.log(1-q)/Math.log(1-p));
+  e.innerHTML=`<dt>Promedio</dt><dd>${fmt(1/p)} kills</dd><dt>50% de que caiga</dt><dd>${fmt(n(.5))} kills</dd><dt>90% de que caiga</dt><dd>${fmt(n(.9))} kills</dd><dt>99% de que caiga</dt><dd>${fmt(n(.99))} kills</dd>`;
+}
+
+/* ---------- TÍTULOS ---------- */
+const colorTag={Purple:"purple",Green:"green",Gold:"gold"};
+const FAMS=[
+ {id:"lunar",name:"Lunar",intro:"Títulos de Weapons Master y Armor Master. Los materiales del Excel vienen agrupados por etapa.",blocks:[
+  {t:"list",title:"Lunar: Weapons Master I",items:["Dying Spirit","Rainfall Blossom","Solitary Isolation","Banished Curse","Unconsciousness","Cube","Deicide","Buddha's Leaf"]},
+  {t:"list",title:"Lunar: Weapons Master II",items:["Elusive Existence","Heaven Shatterer","Dance of the Universe","Dragonhunt","Howling Hurricane","Unbowed One","Lamp of the Soul","Neon Purgatory"]},
+  {t:"list",title:"Lunar: Armor Master I (Buddha Light)",items:["Buddha Light Helm","Buddha Light Cloack","Buddha Light War Armor","Buddha Light Wristguards","Buddha Light Shinguards","Buddha Light Shoes"]},
+  {t:"list",title:"Lunar: Armor Master II (Phoenix Dance)",items:["Phoenix Dance Headwear","Phoenix Dance Cloack","Phoenix Dance Robe","Phoenix Dance Wristguards","Phoenix Dance Pants","Phoenix Dance Footwear"]},
+  {t:"list",title:"Lunar: Armor Master III (Solar Flash)",items:["Solar Flash Helm","Solar Flash Cloack","Solar Flash Plate","Solar Flash Sleevelets","Solar Flash Tasses","Solar Flash Greaves"]},
+  {t:"list",title:"Lunar: Armor Master IV",items:["Helm of Gallantry","Sapphire Hat","Ghostmore Hat","Lunar Mantle of Radiance","Glowing Lunar Mantle"]},
+  {t:"list",title:"Lunar: Armor Master V",items:["Underwater Bindings","Underwater Chains","Underwater Shackles"]},
+  {t:"list",title:"Lunar: Armor Master VI",items:["Renovator Shoes","Renovator Footwear","Renovator Boots"]},
+  {t:"list",title:"Lunar: Armor Master VII",items:["Genesis Pants","Genesis Leggings","Genesis Cuisses","Fortress Robe","Fortress Armor","Fortress Plate"]},
+  {t:"table",title:"Materiales: etapa Growth",cols:["Material","Cantidad"],rows:[["Fragment Crystal",54],["Transparent Crystal",18],["Aqua Essence",51],["Flame Essence",51],["Earth Essence",51],["Life Essence",51],["Steel Essence",15],["Chaos Essence",15]]},
+  {t:"table",title:"Materiales: etapa Legend",cols:["Material","Cantidad"],rows:[["Sacred Mother's Aura",72],["Chromatic Tinder",18],["Unknow Tinder",36]]},
+  {t:"table",title:"Materiales: etapa Lunar",cols:["Material","Cantidad"],rows:[["Fragment Crystal",42],["Transparent Crystal",14],["Chromatic Tinder",14],["Unknow Tinder",14],["Chaos Essence",28],["Steel Essence",6],["Earth Essence",6],["Life Essence",6],["Aqua Essence",6],["Flame Essence",4],["Massaca Saben's Bone Shard",3],["Genesiar Blink's Skin",3],["Mystica Jarax's Poison",3],["Buddha's Serving Blood",3],["Burning Soul's Heart",1],["Tooth of Massaca Saben",1],["Horn of Drake Fling",1],["Crystal of Relic of Wind",1]]},
+  {t:"table",title:"Materiales: etapa Glow",cols:["Material","Cantidad"],rows:[["Essence of Primal Fear",1],["Ancient Helm Mold",2],["Essence Crystal",4],["Unknow Tinder",12],["Chromatic Tinder",6],["Ancient Tinder",16]]},
+  {t:"note",text:"El Excel anota 504 soles de CV junto a la etapa Growth. Falta confirmar qué materiales corresponden a cada título."},
+  {t:"table",title:"Cómo conseguir un Lunar con God's Breath y Neo Deity",cols:["Ruta","Primer jefe","Segundo jefe","Tercer jefe","Total"],rows:[
+    ["Izquierda","Genesiac Blink: 2 God + 20 Neo","Mystical Jarax: 2 God + 20 Neo","Relic of Wind: 5 God + 40 Neo","6 God's Breath y 80 Neo Deity"],
+    ["Ambas","Genesiac Blink: 2 God + 20 Neo","Hauntery Queen: 4 God + 30 Neo","Primal Fear: 5 God + 40 Neo","11 God's Breath y 90 Neo Deity"],
+    ["Derecha","Genesiac Blink: 2 God + 20 Neo","Massaca Seben: 3 God + 30 Neo","Drake Fling: 5 God + 40 Neo","10 God's Breath y 90 Neo Deity"]]},
+  {t:"note",ok:true,text:"1 Neo Deity = 5 God's Breath. Pasos: ve a Lunar, habla con el NPC Tsou y abre los jefes que quieras. Habla con el Lunar Janitor, abre un Lunar en modo Squad y pasa por el teleport azul. Con el NPC entra a Genesiac Blink, mata los pilares según tu ruta y luego a los jefes. Vuelve con el NPC y repite desde ahí hasta terminar. Ojo: en la imagen original la ruta izquierda suma 9 God's Breath (2+2+5) pero el total dice 6; confírmalo en el juego."}
+ ]},
+ {id:"warsoul",name:"Warsoul",intro:"Warsoul Weaponry I, II y III.",blocks:[
+  {t:"list",title:"Warsoul Weaponry I",items:["Alphawolf Prayer","Lonewalker","Gloomy Hope","Cost of Glory","Lotus of Illusion","Mysto Caster"]},
+  {t:"list",title:"Warsoul Weaponry II",items:["Cirruslord","Brothers of Fear","Crescentic Sharpness","Flowing Stardust","Arch Devil's Touch","Abysmal Tides"]},
+  {t:"list",title:"Warsoul Weaponry III",items:["Heroic Pride","Lunar Dissector","Tyreseus Power","Single Butterfly","Gale of the Tiger"]},
+  {t:"table",title:"Costo en Supply Tokens por pieza",cols:["Pieza","Base","Supply Tokens"],rows:[["Ksitigarbha",1700,17000],["Vajra",1700,17000],["Samantabhadra",1700,5100],["Mansjuri",1700,1700],["Arkarsja",1700,8500],["Jakari",1700,8500],["Avalokites",1700,1700]],foot:["Total","",59500]},
+  {t:"table",title:"Dos formas de pagar registradas en el Excel",cols:["Opción","Materiales","Supply Tokens"],rows:[["Con Seal of War","680 Seal of War + 8.500 Supply Tokens","42.500"],["Con Sovereign's Seal","136 Sovereign's Seal + 51 Orichalcum","80.750"]]},
+  {t:"note",text:"El Excel no dice a qué pieza o título aplica cada opción de pago. Hay que confirmarlo antes de planificar."}
+ ]},
+ {id:"twilight",name:"Twilight",intro:"Sets Lionheart, Asura y Archangel con armas. Se hacen con materiales de las instancias TT.",blocks:[
+  {t:"list",title:"Twilight: Lionheart",items:["Lionheart Plate","Lionheart Vambraces","Lionheart Cuisses","Lionheart Greaves","Ancient Behemoth's Helm","Lionheart Necklace","Lionheart Belt"]},
+  {t:"list",title:"Twilight: Asura",items:["Asura Armor","Asura Braces","Asura Greaves","Asura Boots","Ancient Behemoth's Helm","Asura Necklace","Asura Belt"]},
+  {t:"list",title:"Twilight: Archangel",items:["Archangel Tunic","Archangel Sleeves","Archangel Wrap","Archangel Boots","Ancient Behemoth's Helm","Archangel Pendant","Archangel Sash"]},
+  {t:"list",title:"Twilight: Weapons",items:[["Inferno-Heaven Scimitar","Golden Mask"],["Voidrider's Touch","Twilight Scepter"],["Striking Dragon","Heart of Nature"],["Ashura of Purgatory","Golden Mask"],["Sinrabansho","Twilight Scepter"],["Punishing Thunder","Heart of Nature"],["Roaring Flame","Twilight Scepter"],["Relentless Finisher","Heart of Nature"]]},
+  {t:"mats"}
+ ]},
+ {id:"nirvana",name:"Nirvana",intro:"En el Excel cada set Nirvana va junto a un set Twilight: Shadow Ashura con Lionheart, Lions Roar con Asura y Sacred Legate con Archangel. Las cantidades de cada fase (TT60 a TT99) son totales.",blocks:[
+  {t:"list",title:"Nirvana: Shadow Ashura (con Lionheart)",items:[["Shadow Ashura Plate","Pechera"],["Shadow Ashura Bracers","Pants"],["Shadow Ashura Greaves","Botas"],["Shadow Ashura Boots","Brazos"],["Shadow Ashura Hat","Casco"],["Shadow Ashura Cloack","Capa"]]},
+  {t:"list",title:"Nirvana: Lions Roar (con Asura)",items:[["Lions Roar Armor","Pechera"],["Lions Roar Bracers","Pants"],["Lions Roar Greaves","Botas"],["Lions Roar Boots","Brazos"],["Lions Roar Helm","Casco"],["Lions Roar Cloack","Capa"]]},
+  {t:"list",title:"Nirvana: Sacred Legate (con Archangel)",items:[["Sacred Legate Robe","Pechera"],["Sacred Legate Bracers","Pants"],["Sacred Legate Pants","Botas"],["Sacred Legate Boots","Brazos"],["Sacred Legate Hat","Casco"],["Sacred Legate Cloack","Capa"]]},
+  {t:"table",title:"Fase TT60",cols:["Material","Cantidad"],rows:[["Chientien's Edge",15],["Piece of Skeleton",50],["Broken Drum",15]]},
+  {t:"table",title:"Fase TT70",cols:["Material","Cantidad"],rows:[["Ancient Serpent's Skin",5],["Mysterius Skull",80],["Soulgatherer's Tentacle",10],["Broken Shard of Gold Armor",5],["Forshura Armor",5]]},
+  {t:"table",title:"Fase TT80",cols:["Material","Cantidad"],rows:[["Giant Ape's Tooth",24],["Foshura's Hook",48],["Klunky Sword",128],["Claw of Consumer of Souls",8],["Chin's Plate",8],["Soulgatherer Mirror",8],["Feng's Black Armor",24],["Tough Shard of Gold Armor",8],["Frenzy Lion's Skin",15]]},
+  {t:"table",title:"Fase TT90",cols:["Material","Cantidad"],rows:[["Dust of Devil",24],["Frenzy Lion's Edge",8],["Stone of Sacred Temple",318],["Dust of Stars",23],["Antenna of Consumer of Souls",23],["Forshura's Arm",23],["Astral Stone",32],["Evil Minion's Horn",39],["Sorceress's Hand",23],["Ancient Devil Horn",8],["Horn of Feng's Horse",8],["Ghost Lord's Ribbon",48],["Giant Beast's Armor",15],["War Drum",15],["Chin's Plate",15],["Giant Beast's Shell",12],["Iron Plate of Darkness",15],["Sacred Mother's Orb",15]]},
+  {t:"table",title:"Fase TT99",cols:["Material","Cantidad"],rows:[["Empire Sigh",4],["Illusion Lord Stone",8],["Tsuchun Blazing Wings",4],["Tsuchun Silk Whill",10],["Sign of Twilight",320],["Monarch Will",20],["Skaidred Edge",10],["Illusion Spring",40],["Ghost Lord's Dark Aura",24],["Ghost Lord's Protection",6],["Giant Beast's Footprint",6],["Evil Minion's Burning Heart",48],["Illusion Stone",6],["Tsu's Ghost Mask",24],["Sorceress's Soul",6],["Shards of Darkness",24]]},
+  {t:"table",title:"Armas Nirvana N2 y su arma Twilight",cols:["Arma Nirvana N2","Arma Twilight","Armas previas"],rows:[
+   ["Crimson Ether Blade","Inferno-Heaven Ravager","Ravager, ravager, forceblade, warriorblade, petrified femur"],
+   ["Wheel of Warfog","Unparalleled Brimstone Edges","Beacon Axes, Shinroaxes, thunderbolt axes, skeletons axes"],
+   ["Ocean Clouds","Whitesands Spear","Desert Thrust, Demon heart, Jaden Spear, Petrified lance"],
+   ["Dance of Goddess","Berserker Fist","Deitnia Fist, Soulmessenger Fists, skywarriors fists, Courageous Fists"],
+   ["Abomination of Dragons","Constellation's Fall","Blinding radiance, Flash fire, thundercrack, swiftwind crossbow"],
+   ["Circle of Life","Inferno-Heaven Souleater","innocent reverie, yaksa, ashura sign, ancient arbor"],
+   ["Dark Death Thorn","Barrier Thorn","backbiter, hook and thorn, bloodlusting thongues, crescent thorn"],
+   ["Underworld Soulsphere","Soulbringer Sphere","icecrystal petal, diamond demon, heavenly blaze, flameheart soulsphere"]]}
+ ]},
+ {id:"dawn",name:"Rising Dawn",intro:"Las piezas Awakened salen de los sets Lunar Solar Flash (Lionheart), Buddha Light (Ashura) y Phoenix Dance (Archangel).",blocks:[
+  {t:"list",title:"Rising Dawn: Lionheart (desde Solar Flash)",items:["Awakened Lionheart Plate","Awakened Lionheart Vambraces","Awakened Lionheart Cuisses","Awakened Lionheart Greaves","Awakened Ancestral Divine Helm","Awakened Demon Serene Robe"]},
+  {t:"list",title:"Rising Dawn: Ashura (desde Buddha Light)",items:["Awakened Asura Gloves","Awakened Asura Braces","Awakened Asura Greaves","Awakened Asura Boots","Awakened Ancestral Divine Hat","Awakened Demon Obscure Robe"]},
+  {t:"list",title:"Rising Dawn: Archangel (desde Phoenix Dance)",items:["Awakened Archangel Gloves","Awakened Archangel Greaves","Awakened Archangel Tunic","Awakened Archangel Boots","Awakened Hat of Infinite Power","Awakened DemonSpell Robe"]},
+  {t:"table",title:"Costo por pieza Awakened",cols:["Material","Por pieza","Las 18 piezas"],rows:[["Sacred Mother's Aura",4,72],["Chromatic Tinder",1,18],["Unknow Tinder",2,36],["Wood CV",10,180],["Uncanny N1",100,1800],["Uncanny N2",150,2700]]},
+  {t:"note",ok:true,text:"Si N1 y N2 son Uncanny Crystals, en Evolved 1 Supply Token da 5 Uncanny. Las 4.500 Uncanny de las 18 piezas equivaldrían a 900 Supply Tokens."},
+  {t:"list",title:"Rising Dawn: armas N2 (150 Raptures c/u)",items:["Autumn Crescent","Unicorn's Tragedy","Galaxy Shocker","Jaden Emperor's Defiance","Foundation of World","Peak of Clouds","Netherworld Guidance","Buddha's Hatred"]},
+  {t:"list",title:"Rising Dawn: armas N1 (100 Raptures c/u)",items:["Nightfall Lamp","Dragon Descaler","Sonar Break","Regenesis","Immortal Indulgence","Sover Sovereign","Eternal Sleep","Accursed Exile"]},
+  {t:"note",text:"Las armas N2 suman 1.200 Raptures y las N1 800. En Evolved 1 Supply Token da 1 Rapture, o sea 2.000 Supply Tokens en total. Cada arma parte de un arma Lunar de CV: Lamp of the Soul, Howling Hurricane, Dance of the Universe, Elusive Existence, Dying Spirit, Cube, Unconsciousness y Banished Curse."}
+ ]},
+ {id:"molent",name:"Molent Mines",intro:"Cantidades por jefe y por set. El Excel no indica la unidad.",blocks:[
+  {t:"table",title:"Cantidades por jefe",cols:["Set","Vulthoom","Nug and Yeb","Yig","Gol-Goroth","Atlach-Nacha","Juk-Shabb","Cthulhu"],rows:[
+   ["Disciple Set",1,1,1,1,1,1,1],["Noble Set",6,3,3,3,3,3,3],["Grandmaster Set",5,6,10,"",5,10,5],["Living Madness","","","",5,5,5,10]],foot:["Totales",12,10,14,9,14,19,19]}
+ ]},
+ {id:"world",name:"Vuelta al mundo",intro:"Diez niveles, cinco objetos por nivel.",blocks:[
+  {t:"list",title:"Winter's Memory LV.1",items:["Doll","Marble","Kingfisher's Feather","Folding Fan","Oilpaper Umbrella"]},
+  {t:"list",title:"Fleeting Love LV.2",items:["Gilt Ring","Undelivered Love Letter","Expired Ship Ticket","Shabby Rattle","Luminesce Sachet"]},
+  {t:"list",title:"Swan's Grace LV.3",items:["Soup of Pearls","Canned Tuna","Cognac","Pork","Monkey Wine"]},
+  {t:"list",title:"Wanderer's Solitude LV.4",items:["Rusted Blade","Poisoned Arrow","Sharp Dagger","Lavish Quiver","Gold-plated Saddle"]},
+  {t:"list",title:"Fortune's Collector LV.5",items:["Banned Novel","Fake Calligraphy","Royal Jewellery","Painting of Pecking Chicklings","Rubbings of Ancient Text"]},
+  {t:"list",title:"Inked Heart LV.6",items:["Fine Bamboo Flute","Rice Paper","Creek Rinsed Voile","Huzhou Brush","Cup of Grief"]},
+  {t:"list",title:"Most Glamourous LV.7",items:["Jiangan Osier","Luminous Grail","Clivia Orchid","Fool's Casket","Raft of Huang River"]},
+  {t:"list",title:"Harmony's Resonance LV.8",items:["Scorch-tailed Instrument","Bone of Swift Horse","Zhaojun's Pipa","Gongsun's Dance Sword","Adjustant's Shirt"]},
+  {t:"list",title:"The Brisk Traveler LV.9",items:["Esoterica of Tathagata","Travelers of Mount Xi","Lanke Chess Manual","Note of Guanglingsan","Prologue of Lanting Anthology"]},
+  {t:"list",title:"Royal Overwatch LV.10",items:["Dragon Fossil","Commander's Seal","Lofty Monk's Relic","Golden Jade Suit","Esoterica of Jiuyin"]}
+ ]},
+ {id:"necro",name:"Necronomicón",intro:"Cadena de libros: Sacred Compendium → Codex Oblivia → Cosmic Atlas → Necronomicón.",blocks:[
+  {t:"table",title:"Qué pide cada libro",cols:["Libro","Evolved Epitome","Stardust","Papyrus"],rows:[["Cosmic Atlas",10,100,50],["Necronomicón",25,200,150]],foot:["Total",35,300,200]},
+  {t:"table",title:"Equivalencias",cols:["Item","Se hace con"],rows:[["Stardust","300 Supply Tokens"],["Papyrus","2 Event Gold"],["Evolved Epitome","25 badges"],["1 badge","35 Supply Tokens"]]},
+  {t:"note",ok:true,text:"Todo el Necronomicón equivale a unos 90.000 Supply Tokens por el Stardust, 875 badges por los Epitomes (unos 30.600 Supply Tokens) y 400 Event Gold por el Papyrus."}
+ ]}
+];
+const MATS=[
+ ["Klunky Sword","Purple","",,150],["Stone of Sacred Temple","Purple","",,516],["Sign of Twilight","Purple","",,816],
+ ["Chin's Plate","Green","TT 1-3","Chintien: Substancia",75],["War Drum","Green","TT 1-3","Lord of Percussion: Substancia",45],
+ ["Soulgatherer's Mirror","Green","TT 1-3","Soulbanisher: Substancia",15],["Ancient Serpent's Blood","Green","TT 1-3","Vipenalt: Substancia",15],
+ ["Dust of Stars","Green","TT 2-2","Astralwalker: Naught",45],["Forshura's Arm","Green","TT 2-3","General Wurlord: Null",45],
+ ["Horn of Feng's Horse","Green","TT 2-3","General Feng: Null",15,252,"5,4M",7560,"162M"],
+ ["Giant Ape's Tail","Green","TT 2-3","Cosmoforce: Null",15,105,"5,5M",1890,"99M"],
+ ["Antenna of Consumer of Souls","Green","TT 2-3","Soulripper: Null",45,488,"10,44M",2928,"62,64M"],
+ ["Iron Plate of Darkness","Green","TT 3-1","Coredash: Null",45,210,"4,5M",1260,"27M"],
+ ["Evil Minion's Horn","Green","TT 3-1","Djinscream: Null",45,420,"9M",7560,"162M"],
+ ["Sorceress's Hand","Green","TT 3-1","Deathflow: Null",60,490,"10,5M",8820,"189M"],
+ ["Giant Beast's Armor","Green","TT 3-1","Dark Colluseat: Null",45,840,"18M",15120,"324M"],
+ ["Giant Beast's Shell","Gold","TT 3-1","Dark Colluseast: Null",30],["Sacred Mother's Orb","Green","TT 3-1","Illusion Nemen: Null",60],
+ ["Ghost Lord's Ribbon","Green","TT 3-1","Steelation: Null",120],["Shards of Darkness","Green","TT 3-2","Coredash: Vacuity",72],
+ ["Sorceress's Soul","Gold","TT 3-2","Deathflow: Vacuity",18],["Skaidread's Orb","Green","TT 3-2","Twilight Emperor: Vacuity",24],
+ ["Empire's Back Image","Gold","TT 3-2","Twilight Emperor: Vacuity",6],["Minister's Stone","Green","TT 3-2","Twilight Minister: Vacuity",24],
+ ["Tsu's Ghost Mask","Green","TT 3-2","Twilight Minister: Vacuity",72],["Tsuchun's Dark Soul","Gold","TT 3-2","Twilight Minister: Vacuity",6],
+ ["Evil Minion's Burning Heart","Green","TT 3-3","Djinscream: Doom",72],["Ghost Lord's Dark Aura","Green","TT 3-3","Steelation: Doom",72],
+ ["Ghost Lord's Protection","Gold","TT 3-3","Steelation: Doom",18],["Giant Beast's Footprint","Gold","TT 3-3","Dark Colluseat: Doom",18],
+ ["Illusion Stone","Gold","TT 3-3","Illusion Lord: Armageddon",18]
+];
+function famProgress(f){
+  let a=0,b=0;
+  f.blocks.forEach((bl,bi)=>{ if(bl.t==="list") bl.items.forEach((_,ii)=>{b++; if(S.checks[`tt:${f.id}:${bi}:${ii}`])a++;}); });
+  return [a,b];
+}
+function tableHTML(bl){
+  const num=v=>typeof v==="number";
+  return `<h3>${esc(bl.title)}</h3><div class="scroll"><table><thead><tr>${bl.cols.map((c,i)=>`<th class="${i&&bl.rows.some(r=>num(r[i]))?"n":""}">${esc(c)}</th>`).join("")}</tr></thead><tbody>${bl.rows.map(r=>`<tr>${r.map((c,i)=>`<${i?"td":"th scope=\"row\""} class="${num(c)?"n":""}">${num(c)?fmt(c):esc(c)}</${i?"td":"th"}>`).join("")}</tr>`).join("")}</tbody>${bl.foot?`<tfoot><tr>${bl.foot.map((c,i)=>`<${i?"td":"th scope=\"row\""} class="${num(c)?"n":""}">${num(c)?fmt(c):esc(c)}</${i?"td":"th"}>`).join("")}</tr></tfoot>`:""}</table></div>`;
+}
+function matsHTML(){
+  return `<h3>Materiales de las instancias TT</h3>
+  <p class="soft">El color es el tipo de material. Las columnas de Chips salen de la misma fila del Excel; confírmalas antes de comprar.</p>
+  <div class="scroll"><table><thead><tr><th>Material</th><th>Color</th><th>Instancia</th><th>Monstruo</th><th class="n">Cantidad</th><th class="n">Chips c/u</th><th class="n">Coins c/u</th><th class="n">Chips total</th><th class="n">Coins total</th></tr></thead><tbody>
+  ${MATS.map(m=>`<tr><th scope="row">${esc(m[0])}</th><td><span class="tag ${colorTag[m[1]]}">${m[1]==="Purple"?"Morado":m[1]==="Green"?"Verde":"Dorado"}</span></td><td>${esc(m[2]||"")}</td><td>${esc(m[3]||"")}</td><td class="n">${fmt(m[4])}</td><td class="n">${m[5]?fmt(m[5]):""}</td><td class="n">${m[6]||""}</td><td class="n">${m[7]?fmt(m[7]):""}</td><td class="n">${m[8]||""}</td></tr>`).join("")}
+  </tbody></table></div>
+  <p class="soft">Materiales generales que pide el Excel: Ultimate Substances (muchas), 8.970 Uncanny Crystals, 4.950 Tokens of Luck y 18 Essence of Defense.</p>`;
+}
+function renderTitles(){
+  const open=S.ui.open||{};
+  $("#p-titles").innerHTML=`
+    <h2>Títulos crafteables</h2>
+    <p>Estos se fabrican con materiales, sin depender de un molde raro. Abre una familia y marca lo que ya tienes.</p>
+    <p class="soft">¿Quieres ver <b>qué piezas pide cada título</b>, cuáles se repiten y de dónde sale cada una? Está en <a href="titulos-piezas.html">Títulos → piezas</a>. Las cadenas completas de Lunar a Rising Dawn están en el <a href="arbol-recetas-rising-dawn.html">Árbol de recetas</a>.</p>
+    ${FAMS.map(f=>{
+      const [a,b]=famProgress(f);
+      return `<details data-fam="${f.id}" ${open[f.id]?"open":""}><summary><span class="t">${f.name}</span><span class="p">${b?`${a} de ${b}`:"solo consulta"}</span></summary><div class="body">
+      <p>${esc(f.intro)}</p>
+      ${f.blocks.map((bl,bi)=>{
+        if(bl.t==="list") return `<h3>${esc(bl.title)}</h3><ul class="checks">${bl.items.map((it,ii)=>{
+          const id=`tt:${f.id}:${bi}:${ii}`; const nm=Array.isArray(it)?it[0]:it; const sub=Array.isArray(it)?it[1]:"";
+          return `<li><label><input type="checkbox" data-tt="${id}" ${S.checks[id]?"checked":""}><span>${esc(nm)}${sub?`<small class="soft">${esc(sub)}</small>`:""}</span></label></li>`;
+        }).join("")}</ul>`;
+        if(bl.t==="table") return tableHTML(bl);
+        if(bl.t==="note") return `<div class="note ${bl.ok?"ok":""}">${esc(bl.text)}</div>`;
+        if(bl.t==="mats") return matsHTML();
+        return "";
+      }).join("")}
+      </div></details>`;
+    }).join("")}`;
+}
+
+/* ---------- FUENTES ---------- */
+function renderAbout(){
+  $("#p-about").innerHTML=`
+    <h2>De dónde sale cada dato</h2>
+    <p>Usamos las probabilidades y recetas de PWI oficial, porque nadie ha confirmado que Evolved las haya cambiado. Si ves algo distinto en el juego, el juego manda: avísale al gremio.</p>
+    <ul>
+      <li>Rank 9: guía de requisitos de EvolvedPW, wiki de PWI y recetas confirmadas en el juego (el arma y la tarifa de 90M).</li>
+      <li>Títulos y Legendary: Excel de la guía de títulos (actualizado al 15/01/2025).</li>
+      <li>Probabilidades de drop: base de datos de PWI en pwdatabase.com. Hasta ahora solo está cargado el molde de Brahma's Lash.</li>
+      <li>Precios: referencias de mercado del 28/09/2026. Cámbialos en la calculadora.</li>
+    </ul>
+    <h3>Lo que falta por completar</h3>
+    <ul>
+      <li>Probabilidad de drop de los otros moldes de jefe (el Excel solo da tres).</li>
+      <li>Tarifa de forja del cinturón y la armadura en R9.4.</li>
+      <li>Qué materiales Lunar corresponden a cada título, y a qué pieza aplica cada opción de pago de Warsoul.</li>
+      <li>Unidad de las cantidades de Molent Mines.</li>
+      <li>Piezas Legendary sin datos: Aura of Buddha.</li>
+    </ul>
+    <h3>Tu progreso</h3>
+    <p id="storeMsg">${memoryOnly?"Tu navegador no deja guardar datos aquí, así que el progreso se pierde al cerrar la página.":"Tu progreso se guarda en este navegador y no lo ve nadie más. Si usas otro dispositivo, empiezas de cero."}</p>`;
+}
+
+/* ---------- eventos ---------- */
+const TABS=["r9","glyph","legend","titles","about"];
+function showTab(t){
+  if(!TABS.includes(t)) t="r9";
+  S.ui.tab=t; save();
+  $$(".tab").forEach(b=>b.setAttribute("aria-selected",b.dataset.tab===t));
+  $$(".panel").forEach(p=>p.hidden=p.id!=="p-"+t);
+  ({r9:renderR9,glyph:renderGlyph,legend:renderLegend,titles:renderTitles,about:renderAbout})[t]();
+  window.scrollTo({top:0});
+}
+document.addEventListener("click",e=>{
+  const t=e.target.closest("[data-tab]"); if(t&&t.classList.contains("tab")) return showTab(t.dataset.tab);
+  const tg=e.target.closest("[data-target]"); if(tg){S.ui.target=tg.dataset.target;save();return renderR9();}
+  const gl=e.target.closest("[data-glv]"); if(gl){S.ui.glv=+gl.dataset.glv;save();return renderGlyph();}
+  const lk=e.target.closest("[data-lkind]"); if(lk){S.ui.lkind=lk.dataset.lkind;save();return renderLegend();}
+  const lf=e.target.closest("[data-lfilt]"); if(lf){S.ui.lfilt=lf.dataset.lfilt;save();return renderLegend();}
+});
+document.addEventListener("change",e=>{
+  const el=e.target;
+  if(el.dataset.r9){
+    const [pid,stage]=el.dataset.r9.split("|"); const order=STAGES.map(s=>s[0]); const idx=order.indexOf(stage);
+    if(el.checked) order.slice(0,idx+1).forEach(s=>{const p=PIECES.find(x=>x.id===pid); if(p[s]) S.checks[`r9:${pid}:${s}`]=true;});
+    else order.slice(idx).forEach(s=>delete S.checks[`r9:${pid}:${s}`]);
+    save(); return renderR9();
+  }
+  if(el.dataset.lg){ if(el.checked) S.checks[el.dataset.lg]=true; else delete S.checks[el.dataset.lg]; save(); return renderLegend(); }
+  if(el.dataset.tt){
+    if(el.checked) S.checks[el.dataset.tt]=true; else delete S.checks[el.dataset.tt]; save();
+    const d=el.closest("details"); const f=FAMS.find(x=>x.id===d.dataset.fam); const [a,b]=famProgress(f);
+    $(".p",d).textContent=`${a} de ${b}`; return;
+  }
+  if(el.dataset.mode){ S.mode[el.dataset.mode]=el.value; save(); return paintR9(); }
+});
+document.addEventListener("input",e=>{
+  const el=e.target;
+  if(el.dataset.have!==undefined){ S.have[el.dataset.have]=Math.max(0,+el.value||0); save(); paintR9(); }
+  else if(el.dataset.price!==undefined){
+    const v=el.value===""?undefined:Math.max(0,+el.value);
+    if(v===undefined) delete S.price[el.dataset.price]; else S.price[el.dataset.price]=v;
+    save();
+    if(S.ui.tab==="r9") paintR9(); else if(el.dataset.price==="cubi") paintCubi();
+  }
+  else if(el.id==="dropIn"){ S.ui.drop=+el.value||0; save(); paintDrop(); }
+});
+document.addEventListener("toggle",e=>{
+  const d=e.target; if(d.tagName==="DETAILS"&&d.dataset.fam){ S.ui.open=S.ui.open||{}; S.ui.open[d.dataset.fam]=d.open; save(); }
+},true);
+document.addEventListener("change",e=>{
+  if(e.target.dataset&&e.target.dataset.price==="glyph1"&&S.ui.tab==="glyph") renderGlyph();
+});
+
+/* tema y borrado */
+function applyTheme(){ const t=S.ui.theme; if(t) document.documentElement.setAttribute("data-theme",t); else document.documentElement.removeAttribute("data-theme"); }
+$("#themeBtn").addEventListener("click",()=>{
+  const dark=(S.ui.theme? S.ui.theme==="dark" : matchMedia("(prefers-color-scheme:dark)").matches);
+  S.ui.theme=dark?"light":"dark"; save(); applyTheme();
+});
+let resetArmed=0;
+$("#resetBtn").addEventListener("click",function(){
+  if(!resetArmed){ this.textContent="¿Seguro? Pulsa otra vez"; resetArmed=setTimeout(()=>{this.textContent="Borrar mi progreso";resetArmed=0;},4000); return; }
+  clearTimeout(resetArmed); resetArmed=0; this.textContent="Borrar mi progreso";
+  const theme=S.ui.theme; S={checks:{},have:{},price:{},mode:{},ui:{theme}}; save(); applyTheme(); showTab("r9");
+});
+
+load(); applyTheme(); showTab(S.ui.tab||"r9");
+</script>
+</body>
+</html>

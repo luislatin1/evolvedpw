@@ -94,13 +94,21 @@ ul.tree ul>li.node::before{content:"";position:absolute;left:-20px;top:26px;widt
 footer{border-top:1px solid var(--line);padding:16px 0 40px;color:var(--soft);font-size:.88rem}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 @media (max-width:560px){.card{flex-wrap:wrap}.own{margin-left:46px}}
+.sitenav{background:var(--paper2);border-bottom:1px solid var(--line)}
+.sitenav .wrap{display:flex;gap:4px 12px;flex-wrap:wrap;align-items:center;padding-top:7px;padding-bottom:7px}
+.sitenav a{color:var(--soft);text-decoration:none;font-size:.9rem;font-weight:500;padding:3px 10px;border-radius:6px}
+.sitenav a:hover{color:var(--ink);background:var(--card)}
+.sitenav a[aria-current="page"]{background:var(--jadeBg);color:var(--jadeD);font-weight:700}
+.sitenav .lbl{font-size:.8rem;color:var(--soft)}
 </style>
 </head>
 <body>
+<nav class="sitenav" aria-label="Páginas del gremio"><div class="wrap"><span class="lbl">Evolved PW:</span><a href="guia-equipo-evolved.html">Guía de equipo</a><a href="titulos-piezas.html">Títulos → piezas</a><a href="arbol-recetas-rising-dawn.html" aria-current="page">Árbol de recetas</a></div></nav>
 <header><div class="wrap">
   <div class="top"><h1>Árbol de recetas<br>Lunar → Rising Dawn</h1>
     <div style="display:flex;gap:8px"><button class="btn" id="themeBtn" type="button">Cambiar tema</button><button class="btn" id="resetBtn" type="button">Borrar lo marcado</button></div></div>
   <p>Elige una pieza y mira de qué se fabrica, paso por paso, hasta los materiales base. Marca "ya lo tengo" en cualquier paso y la lista de materiales se recalcula sin lo que ya no necesitas.</p>
+  <p>Ver los títulos que piden estas piezas, en <a href="titulos-piezas.html">Títulos → piezas</a>: <a href="titulos-piezas.html#rd-lionheart">Rising Dawn: Lionheart</a> · <a href="titulos-piezas.html#rd-ashura">Rising Dawn: Ashura</a> · <a href="titulos-piezas.html#rd-archangel">Rising Dawn: Archangel</a>. Las piezas doradas de cada set son también las de los títulos <a href="titulos-piezas.html#lun-ia">Lunar: Armor Master I</a>, <a href="titulos-piezas.html#lun-iia">II</a> y <a href="titulos-piezas.html#lun-iiia">III</a>.</p>
 </div></header>
 
 <div class="controls"><div class="wrap">
