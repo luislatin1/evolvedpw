@@ -27,7 +27,7 @@
   --paper:#162026; --paper2:#1D2A31; --card:#1F2D34; --ink:#E7ECE4; --soft:#9FB0B2; --line:#33454D;
   --jade:#63BBA1; --jadeD:#8AD3BD; --jadeBg:#21433B; --red:#E5796A; --redBg:#4A2723; --amber:#D9B857; --amberBg:#40361A;
 }
-html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 64px);-webkit-text-size-adjust:100%}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + var(--navh) + 64px);-webkit-text-size-adjust:100%}
 *,*::before,*::after{box-sizing:inherit}
 body{margin:0;background:var(--paper);color:var(--ink);font:400 16px/1.55 var(--sans)}
 a{color:var(--jadeD)}
@@ -47,7 +47,7 @@ header.top p{font-size:1.05rem;color:var(--soft);margin-top:.6rem}
 .btn:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible,.tab:focus-visible{outline:2px solid var(--jade);outline-offset:2px}
 .btn.danger{color:var(--red);border-color:var(--red)}
 
-nav.tabs{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--paper);border-bottom:1px solid var(--line)}
+nav.tabs{position:sticky;top:calc(env(safe-area-inset-top,0px) + var(--navh));z-index:5;background:var(--paper);border-bottom:1px solid var(--line)}
 nav.tabs .wrap{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none}
 .tab{font:500 1rem var(--sans);color:var(--soft);background:none;border:0;border-bottom:3px solid transparent;padding:14px 14px 11px;cursor:pointer;white-space:nowrap}
 .tab[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--jade);font-weight:700}
@@ -150,8 +150,10 @@ details>.body{padding:2px 2px 18px 26px}
 .kv dd{margin:0}
 footer{border-top:1px solid var(--line);padding:18px 0 40px;color:var(--soft);font-size:.9rem}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
-.sitenav{background:var(--paper2);border-bottom:1px solid var(--line)}
-.sitenav .wrap{display:flex;gap:4px 12px;flex-wrap:wrap;align-items:center;padding-top:7px;padding-bottom:7px}
+/* menú superior fijo */
+:root{--navh:44px}
+.sitenav{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;height:var(--navh);background:var(--paper2);border-bottom:1px solid var(--line)}
+.sitenav .wrap{display:flex;gap:4px 12px;flex-wrap:nowrap;align-items:center;height:100%;overflow-x:auto;white-space:nowrap}
 .sitenav a{color:var(--soft);text-decoration:none;font-size:.9rem;font-weight:500;padding:3px 10px;border-radius:6px}
 .sitenav a:hover{color:var(--ink);background:var(--card)}
 .sitenav a[aria-current="page"]{background:var(--jadeBg);color:var(--jadeD);font-weight:700}
