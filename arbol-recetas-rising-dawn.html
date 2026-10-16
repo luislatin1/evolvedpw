@@ -103,6 +103,29 @@ footer{border-top:1px solid var(--line);padding:16px 0 40px;color:var(--soft);fo
 .sitenav a[aria-current="page"]{background:var(--jadeBg);color:var(--jadeD);font-weight:700}
 .sitenav .lbl{font-size:.8rem;color:var(--soft)}
 
+
+/* vista Materiales */
+.msec{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin:0 0 18px;scroll-margin-top:calc(var(--navh) + 80px)}
+.msec .hd{display:flex;gap:12px;align-items:center;margin-bottom:6px}
+.msec .hd .ic{width:44px;height:44px}
+.msec h2{margin:0;font-size:1.15rem}
+.msec .hd small{color:var(--soft)}
+.rt{border-top:1px dashed var(--line);padding:10px 0 4px;margin-top:8px}
+.rt>b{display:block}
+.rt .s{display:block;font-size:.84rem;color:var(--soft);margin:2px 0 6px}
+.mchip{display:inline-flex;gap:6px;align-items:center;font-size:.84rem;border:1px solid var(--line);border-radius:6px;padding:2px 8px 2px 3px;margin:2px 4px 2px 0;background:var(--paper)}
+.mchip .ic{width:24px;height:24px;border-radius:4px}
+.mchip .ic b{font-size:.72rem}
+.calc label{display:block;font-size:.88rem;margin:8px 0 2px}
+.calc input{font:inherit;width:100%;color:var(--ink);background:var(--paper);border:1px solid var(--line);border-radius:6px;padding:5px 8px}
+.calc .out{font-size:.88rem;margin-top:6px}
+
+table.mtab{width:100%;border-collapse:collapse;font-size:.86rem}
+table.mtab th,table.mtab td{text-align:left;padding:5px 6px;border-bottom:1px solid var(--line);vertical-align:middle}
+table.mtab th{color:var(--soft);font-weight:500}
+table.mtab .n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+table.mtab .row{display:flex;gap:8px;align-items:center}
+table.mtab .ic{width:24px;height:24px}
 /* móvil: árbol más compacto (Twilight tiene hasta 3 niveles anidados) */
 @media (max-width:560px){
   ul.tree ul{margin-left:6px;padding-left:9px}
@@ -120,7 +143,7 @@ footer{border-top:1px solid var(--line);padding:16px 0 40px;color:var(--soft);fo
 <header><div class="wrap">
   <div class="top"><h1>Árbol de recetas<br>Rising Dawn y Twilight</h1>
     <div style="display:flex;gap:8px"><button class="btn" id="themeBtn" type="button">Cambiar tema</button><button class="btn" id="resetBtn" type="button">Borrar lo marcado</button></div></div>
-  <p>Elige una cadena (Rising Dawn o Twilight), una pieza, y mira de qué se fabrica, paso por paso, hasta los materiales base. Marca "ya lo tengo" en cualquier paso y la lista de materiales se recalcula sin lo que ya no necesitas.</p>
+  <p>Elige una cadena (Rising Dawn o Twilight), una pieza, y mira de qué se fabrica, paso por paso, hasta los materiales base. La vista <b>Materiales</b> junta todas las rutas de Fragment Crystal, Essence of Nature y los otros cristales de Lunar. Marca "ya lo tengo" en cualquier paso y la lista de materiales se recalcula sin lo que ya no necesitas.</p>
   <p>Ver los títulos que piden estas piezas, en <a href="titulos-piezas.html">Títulos → piezas</a>: <a href="titulos-piezas.html#rd-lionheart">Rising Dawn: Lionheart</a> · <a href="titulos-piezas.html#rd-ashura">Rising Dawn: Ashura</a> · <a href="titulos-piezas.html#rd-archangel">Rising Dawn: Archangel</a>. Las piezas doradas de cada set son también las de los títulos <a href="titulos-piezas.html#lun-ia">Lunar: Armor Master I</a>, <a href="titulos-piezas.html#lun-iia">II</a> y <a href="titulos-piezas.html#lun-iiia">III</a>. Twilight: <a href="titulos-piezas.html#tw-1">Lionheart</a> · <a href="titulos-piezas.html#tw-2">Asura</a> · <a href="titulos-piezas.html#tw-3">Archangel</a>.</p>
 </div></header>
 
@@ -229,7 +252,8 @@ function matNode(k,q,extra){
   if(k==="badge") sub="No se comercia";
   if(k==="unc") sub="1 Supply Token da 5 en Evolved";
   const link=id?`<a href="${LINK(id)}" target="_blank" rel="noopener" style="font-size:.78rem">ID ${id}</a>`:"";
-  return `<li class="node"><div class="card mat"><span class="tg-sp"></span>${icon(id,n,kind)}<div class="nm"><span class="t">${esc(name)}</span>${sub?`<span class="s">${esc(sub)}</span>`:""} ${link}</div><span class="qty">×${q}</span></div></li>`;
+  const more=(k==="frag"||k==="transp"||k==="nature"||k==="aura"||k==="chroma"||k==="unk")?` <a href="#mat/${k}" style="font-size:.78rem">más rutas</a>`:"";
+  return `<li class="node"><div class="card mat"><span class="tg-sp"></span>${icon(id,n,kind)}<div class="nm"><span class="t">${esc(name)}</span>${sub?`<span class="s">${esc(sub)}</span>`:""} ${link}${more}</div><span class="qty">×${q}</span></div></li>`;
 }
 function itemNode(set,slot,st,title,data,tags,childrenHTML,isRoot){
   const key=ownKey(set,slot,st), own=!!S.own[key], col=!!collapsed[key]&&!own;
@@ -279,9 +303,113 @@ function renderSummary(){
     return `<tr><td><span class="row">${icon(id,n,kind)}<span>${esc(n)}</span></span></td><td class="n">${k==="coins"?fmt(tot[k])+"M":fmt(tot[k])}</td></tr>`}).join("");
   const label={piece:"esta pieza",set:`el set ${S.ui.set} (6 piezas)`,all:"las 18 piezas"}[S.ui.scope];
   const sup=tot.unc?`<hr><small>Las ${fmt(tot.unc)} Uncanny Crystal equivalen a <b>${fmt(tot.unc/5)} Supply Tokens</b> (1 Supply Token = 5 Uncanny en Evolved).</small>`:"";
+  const alt=[];
+  [["frag","frag"],["transp","transp"],["aura","aura"],["chroma","chroma"],["unk","unk"]].forEach(([k,sec])=>{
+    if(!tot[k]) return; const c=CHIPX[MAT[k][1]];
+    alt.push(`<b>${fmt(tot[k])} ${esc(MAT[k][0])}</b> también ${tot[k]===1?"sale":"salen"} con ${fmt(tot[k]*c[0])} Mysterious Chips + ${fmt(tot[k]*c[1]/1e6)}M de oro. <a href="#mat/${sec}">ver rutas</a>`);});
+  if(tot.nature) alt.push(`<b>${fmt(tot.nature)} Essence of Nature</b> también se canjean por Perfect·Token of Luck (${fmt(Math.ceil(tot.nature/EON.gives)*EON.tokens)} tokens). <a href="#mat/nature">ver rutas</a>`);
+  const altH=alt.length?`<hr><small>${alt.join("<br>")}</small>`:"";
   const bd=tot.badge?`<br><small>Las ${fmt(tot.badge)} Basic Badge no se pueden comerciar.</small>`:"";
   $("#sumBox").innerHTML=`<h2>Materiales que faltan</h2><small>Para ${label}, sin contar lo que marcaste como "ya lo tengo".</small>
-    ${rows?`<table style="margin-top:8px"><tbody>${rows}</tbody></table>`:`<p>No falta nada.</p>`}${sup}${bd}`;
+    ${rows?`<table style="margin-top:8px"><tbody>${rows}</tbody></table>`:`<p>No falta nada.</p>`}${sup}${altH}${bd}`;
+}
+
+
+/* ================= MATERIALES (rutas de Fragment Crystal, Essence of Nature, etc.) ================= */
+const FRAG_CHIPS=59, FRAG_GOLD=1260000;
+const CHIPX={ /* [Mysterious Chips, oro, receta] del Mysterious Merchant (NPC 19290), pwdatabase PWI */
+ 16546:[59,1260000,3297],16547:[42,900000,3298],16548:[350,7500000,3299],
+ 15274:[84,3500000,2878],16467:[420,9000000,3301],16466:[140,3000000,3300],16468:[420,9000000,3302],
+ 15302:[488,10440000,3291],15307:[840,18000000,3296],15300:[420,9000000,3289],15301:[490,10500000,3290],
+ 15299:[105,5500000,2879],15303:[210,4500000,3292],15276:[252,5400000,2877]};
+/* Essence of Nature por Perfect·Token of Luck: tokens = cuántos Perfect·Token of Luck pide la receta, gives = cuántas Essence of Nature da. */
+const EON={tokens:7,gives:2}; /* confirmado en el juego (captura): 7 Perfect·Token of Luck → 2 Essence of Nature */
+/* Sacred Mother's Aura por Mysterious Chips (receta 2878 del Mysterious Merchant, pwdatabase PWI): 84 Chips + 3,5M de oro → 1 Aura. */
+const AURA={chips:84,gold:3500000,gives:1};
+const CHIP=["Mysterious Chip",19277];
+const MATS_PAGE=[
+ {k:"frag",n:"Fragment Crystal",id:16546,use:"Armas y armaduras Lunar (3 a 5 por pieza verde o dorada directa)",routes:[
+   {l:"Fabricarlo con fragmentos",where:"Lunar Forge: Material (NPC 16556), The Lunar Glade 355 549. 100 % de éxito. Receta 2148.",
+    mats:[["Aqua Fragment",16448,10],["Flame Fragment",16449,10],["Earth Fragment",16450,10],["Life Fragment",16451,10],["Steel Fragment",16452,10],["Chaos Fragment",16453,10]],gold:0},
+   {l:"Cambiarlo con Mysterious Chips",where:"Mysterious Merchant (NPC 19290): mundo 129 863, 528 660, 545 631 o 560 677. Receta 3297.",
+    mats:[[CHIP[0],CHIP[1],FRAG_CHIPS]],gold:FRAG_GOLD},
+   {l:"Drop y quest",where:"20 % por kill en los 6 jefes de The Lunar Glade nivel 150 (lista en la guía, pestaña Cristales Lunar). Ancient Treasure·Weapons (premio de quest) da 5.",mats:[]}]},
+ {k:"transp",n:"Transparent Crystal",id:16547,use:"1 por pieza verde o dorada directa",routes:[
+   {l:"Fabricarlo con cristales",where:"Lunar Forge: Material (NPC 16556). Receta 2149.",
+    mats:[["Aqua Crystal",16454,10],["Flame Crystal",16455,10],["Earth Crystal",16456,10],["Life Crystal",16457,10],["Steel Crystal",16458,10],["Chaos Crystal",16459,10]],gold:0},
+   {l:"Cambiarlo con Mysterious Chips",where:"Mysterious Merchant (NPC 19290). Receta 3298.",mats:[[CHIP[0],CHIP[1],42]],gold:900000},
+   {l:"Drop",where:"10 % por kill en los mismos 6 jefes.",mats:[]}]},
+ {k:"essc",n:"Essence Crystal",id:16548,use:"1 por arma verde; 4 para el glow de las armaduras (según el Excel)",routes:[
+   {l:"Fabricarlo con esencias",where:"Lunar Forge: Material (NPC 16556). Receta 2150.",
+    mats:[["Aqua Essence",16460,5],["Flame Essence",16461,5],["Earth Essence",16462,5],["Life Essence",16463,5],["Steel Essence",16464,5],["Chaos Essence",16465,5]],gold:0},
+   {l:"Cambiarlo con Mysterious Chips",where:"Mysterious Merchant (NPC 19290). Receta 3299.",mats:[[CHIP[0],CHIP[1],350]],gold:7500000},
+   {l:"Drop",where:"1 % por kill en los mismos 6 jefes.",mats:[]}]},
+ {k:"nature",n:"Essence of Nature",id:16545,use:"3 en armadura verde, 10 en dorada, 15 en Armor Master V a VII, 25 a 30 en armas doradas",routes:[
+   {l:"Canjearla por Perfect·Token of Luck",eon:true,
+    where:"Receta del PW Boutique Agent (NPC 21026): 7 Perfect·Token of Luck dan 2 Essence of Nature, 100 % de éxito, 0 coins, sin skill (confirmado en el juego). Los Perfect·Token of Luck salen de paquetes y eventos (Item Mall)."}]},
+ {k:"aura",n:"Sacred Mother's Aura",id:15274,use:"4 por pieza dorada de armadura (Buddha Light, Phoenix Dance, Solar Flash); 72 en las 18 piezas Rising Dawn",routes:[
+   {l:"Cambiarla con Mysterious Chips",aura:true,
+    where:"Mysterious Merchant (NPC 19290): mundo 129 863, 528 660, 545 631 o 560 677. Receta 2878."}]},
+ {k:"chroma",n:"Chromatic Tinder",id:16467,use:"1 por pieza dorada de armadura; 2 o 3 en armas doradas Lunar",routes:[
+   {l:"Cambiarlo con Mysterious Chips",where:"Mysterious Merchant (NPC 19290). Receta 3301.",mats:[[CHIP[0],CHIP[1],420]],gold:9000000}]},
+ {k:"unk",n:"Unknown Tinder",id:16466,use:"2 por pieza dorada de armadura",routes:[
+   {l:"Cambiarlo con Mysterious Chips",where:"Mysterious Merchant (NPC 19290). Receta 3300.",mats:[[CHIP[0],CHIP[1],140]],gold:3000000}]},
+ {k:"chips",n:"Dorados de Twilight y otros que se cambian por Chips",id:CHIP[1],table:true,use:"Twilight (nivel 99) y armas doradas Lunar"}
+];
+const matChipH=(m)=>`<span class="mchip">${icon(m[1],m[0],"mat")}${m[2]?`<b>${fmt(m[2])}×</b>`:""}${m[1]?`<a href="${LINK(m[1])}" target="_blank" rel="noopener">${esc(m[0])}</a>`:esc(m[0])}</span>`;
+function routeH(r){
+  let body="";
+  if(r.eon){
+    const ok=EON.tokens&&EON.gives;
+    body=ok?`<div>${matChipH(["Perfect·Token of Luck",null,EON.tokens])} → ${matChipH(["Essence of Nature",16545,EON.gives])}</div>`
+           :`<div>${matChipH(["Perfect·Token of Luck",null,0])} → ${matChipH(["Essence of Nature",16545,0])} <span class="tag am">cantidad por confirmar en el juego</span></div>`;
+  } else if(r.aura){
+    const ok=AURA.chips&&AURA.gives;
+    body=ok?`<div>${matChipH([CHIP[0],CHIP[1],AURA.chips])}${AURA.gold?`<span class="mchip"><b>${fmt(AURA.gold)}</b> de oro</span>`:""} → ${matChipH(["Sacred Mother's Aura",15274,AURA.gives])}</div>`
+           :`<div>${matChipH([CHIP[0],CHIP[1],0])} → ${matChipH(["Sacred Mother's Aura",15274,0])} <span class="tag am">cantidad por confirmar en el juego</span></div>`;
+  } else {
+    body=(r.mats.length?`<div>${r.mats.map(matChipH).join("")}${r.gold?`<span class="mchip"><b>${fmt(r.gold)}</b> de oro</span>`:""}</div>`:"");
+  }
+  return `<div class="rt"><b>${esc(r.l)}</b><span class="s">${esc(r.where)}</span>${body}</div>`;
+}
+function chipsSecH(m){
+  const rows=[];
+  Object.keys(TT.mats).forEach(id=>{const c=CHIPX[id]; if(c) rows.push([+id,TT.mats[id].n,c,"Twilight · "+String(TT.mats[id].w||"").replace(/^dorado · /,"")]);});
+  rows.push([16468,"Ancient Tinder",CHIPX[16468],"Armas doradas Lunar"]);
+  rows.sort((a,b)=>b[2][0]-a[2][0]);
+  return `<section class="msec" id="m-${m.k}"><div class="hd">${icon(m.id,"Mysterious Chip","mat")}<div><h2>${esc(m.n)}</h2><small>Mysterious Merchant (NPC 19290): mundo 129 863, 528 660, 545 631 o 560 677</small></div></div>
+    <p class="s" style="color:var(--soft);font-size:.88rem;margin:4px 0 8px">Todos estos dorados se pueden cambiar con Mysterious Chips (1 por cambio). Si ya tienes el material, no hace falta.</p>
+    <div style="overflow-x:auto"><table class="mtab"><thead><tr><th>Material</th><th class="n">Chips</th><th class="n">Oro</th><th>Receta</th><th>Se usa / sale en</th></tr></thead><tbody>
+    ${rows.map(r=>`<tr><td><span class="row">${icon(r[0],r[1],"mat")}<a href="${LINK(r[0])}" target="_blank" rel="noopener">${esc(r[1])}</a></span></td><td class="n">${fmt(r[2][0])}</td><td class="n">${fmt(r[2][1]/1e6)}M</td><td><a href="https://www.pwdatabase.com/pwi/recipe/${r[2][2]}" target="_blank" rel="noopener">${r[2][2]}</a></td><td>${esc(r[3])}</td></tr>`).join("")}
+    </tbody></table></div></section>`;
+}
+function matSecH(m){
+  if(m.table) return chipsSecH(m);
+  return `<section class="msec" id="m-${m.k}"><div class="hd">${icon(m.id,m.n,"mat")}<div><h2>${esc(m.n)}</h2><small>ID <a href="${LINK(m.id)}" target="_blank" rel="noopener">${m.id}</a> · se usa en: ${esc(m.use)}</small></div></div>${m.routes.map(routeH).join("")}</section>`;
+}
+function mcOut(k,v){
+  if(!v) return "";
+  if(k==="f") return `${fmt(v*60)} fragmentos (10 de cada tipo) <b>o</b> ${fmt(v*FRAG_CHIPS)} Mysterious Chips + ${fmt(v*FRAG_GOLD/1e6)}M de oro`;
+  if(k==="n") return (EON.tokens&&EON.gives)?`${fmt(Math.ceil(v/EON.gives)*EON.tokens)} Perfect·Token of Luck`:`Falta confirmar cuántos Perfect·Token of Luck pide cada canje.`;
+  if(k==="a"){ if(!(AURA.chips&&AURA.gives)) return `Falta confirmar cuántos Mysterious Chips pide el cambio y cuántas Aura da.`;
+    const t=Math.ceil(v/AURA.gives); return `${fmt(t*AURA.chips)} Mysterious Chips`+(AURA.gold?` + ${fmt(t*AURA.gold/1e6)}M de oro`:""); }
+  return "";
+}
+function matCalc(){
+  const c=S.ui.mc||{f:0,n:0,a:0}, f=+c.f||0, n=+c.n||0, a=+c.a||0;
+  return `<h2>¿Cuántos necesito?</h2><div class="calc">
+    <label for="mcF">Fragment Crystal</label><input id="mcF" type="number" min="0" step="1" data-mc="f" value="${f||""}" placeholder="0">
+    <div class="out">${mcOut("f",f)}</div>
+    <label for="mcN">Essence of Nature</label><input id="mcN" type="number" min="0" step="1" data-mc="n" value="${n||""}" placeholder="0">
+    <div class="out">${mcOut("n",n)}</div>
+    <label for="mcA">Sacred Mother's Aura</label><input id="mcA" type="number" min="0" step="1" data-mc="a" value="${a||""}" placeholder="0">
+    <div class="out">${mcOut("a",a)}</div></div>
+    <hr><small>Las cantidades salen de pwdatabase (PWI) y de capturas del juego. Si en el juego ves otra, manda el juego.</small>`;
+}
+function renderMat(){
+  $("#treeBox").innerHTML=`<p style="margin:0 0 10px;color:var(--soft)">Materiales que piden las recetas de Lunar. Cada uno tiene más de una forma de conseguirse.</p>`+MATS_PAGE.map(matSecH).join("");
+  $("#sumBox").innerHTML=matCalc();
+  if(S.ui.matFocus){const el=document.getElementById("m-"+S.ui.matFocus); S.ui.matFocus=null; if(el) el.scrollIntoView();}
 }
 
 
@@ -295,7 +423,7 @@ const ttTiers=(set,pk)=>(ttSet(set).pieces.find(p=>p.k===pk)||ttSet(set).pieces[
 function ttNeed(set,pk){const m={},t=ttTiers(set,pk);
   for(let i=0;i<t.length;i++){ if(S.own[ttKey(set,pk,i)]) break; t[i].mats.forEach(([id,q])=>m[id]=(m[id]||0)+q); } return m}
 function ttMat(id,q){const m=TT.mats[id];
-  return `<li class="node"><div class="card mat"><span class="tg-sp"></span>${icon(id,m.n,"mat")}<div class="nm"><span class="t">${esc(m.n)}</span>${m.w?`<span class="s">${esc(m.w)}</span>`:""} <a href="${LINK(id)}" target="_blank" rel="noopener" style="font-size:.78rem">ID ${id}</a></div><span class="qty">×${q}</span></div></li>`}
+  return `<li class="node"><div class="card mat"><span class="tg-sp"></span>${icon(id,m.n,"mat")}<div class="nm"><span class="t">${esc(m.n)}</span>${m.w?`<span class="s">${esc(m.w)}</span>`:""}${CHIPX[id]?`<span class="s">Cambio: ${fmt(CHIPX[id][0])} Mysterious Chips + ${fmt(CHIPX[id][1]/1e6)}M de oro · <a href="#mat/chips">ver rutas</a></span>`:""} <a href="${LINK(id)}" target="_blank" rel="noopener" style="font-size:.78rem">ID ${id}</a></div><span class="qty">×${q}</span></div></li>`}
 function ttItem(set,pk,i){
   const tiers=ttTiers(set,pk), t=tiers[i], key=ttKey(set,pk,i), own=!!S.own[key], col=!!collapsed[key]&&!own;
   const npc=TT.npc[t.npc], isRoot=i===0;
@@ -336,43 +464,55 @@ function ttSummary(){
   const ids=Object.keys(tot).sort((x,y)=>{const gx=grp[TT.mats[x].c]??3,gy=grp[TT.mats[y].c]??3;return gx-gy||TT.mats[x].n.localeCompare(TT.mats[y].n)});
   const rows=ids.map(id=>{const m=TT.mats[id];return `<tr><td><span class="row">${icon(id,m.n,"mat")}<span>${esc(m.n)}</span></span></td><td class="n">${fmt(tot[id])}</td></tr>`}).join("");
   const label={piece:"esta pieza",set:`el set ${ttSet(a.set).title} (7 piezas)`,all:"los 3 sets (21 piezas)"}[a.scope];
+  let cn=0,cc=0,cg=0; ids.forEach(id=>{const c=CHIPX[id]; if(c){cn+=tot[id];cc+=tot[id]*c[0];cg+=tot[id]*c[1];}});
+  const cx=cn?`<hr><small>Los <b>${fmt(cn)}</b> dorados de esta lista se pueden cambiar: equivalen a <b>${fmt(cc)} Mysterious Chips</b> + ${fmt(cg/1e6)}M de oro. <a href="#mat/chips">ver rutas</a></small>`:"";
   $("#sumBox").innerHTML=`<h2>Materiales que faltan</h2><small>Para ${label}, sin contar lo que marcaste como "ya lo tengo".</small>
-    ${rows?`<table style="margin-top:8px"><tbody>${rows}</tbody></table>`:`<p>No falta nada.</p>`}<hr><small>Orden: dorados, verdes y morados (colores del Excel de TT), luego el resto. En cada material del árbol ves en qué instancia y jefe cae. Cada set necesita su propio casco.</small>`;
+    ${rows?`<table style="margin-top:8px"><tbody>${rows}</tbody></table>`:`<p>No falta nada.</p>`}${cx}<hr><small>Orden: dorados, verdes y morados (colores del Excel de TT), luego el resto. En cada material del árbol ves en qué instancia y jefe cae. Cada set necesita su propio casco.</small>`;
 }
 function renderTT(){
   const a=S.ui.tt, st=ttSet(a.set);
   $("#ttSetSeg").innerHTML=TT.sets.map(s=>`<button type="button" data-ttset="${s.id}" aria-pressed="${s.id===a.set}">${esc(s.id)} · ${esc(s.type)}</button>`).join("");
   $("#ttPieceSeg").innerHTML=TT.slots.map(([k,l])=>`<button type="button" data-ttpiece="${k}" aria-pressed="${k===a.piece}">${l}</button>`).join("");
   $("#ttScope").value=a.scope;
-  $("#treeBox").innerHTML=ttTree();
+  $("#treeBox").innerHTML=lordNote("Twilight",S.ui.tt.set)+ttTree();
   ttSummary();
 }
 
+/* ---- stats del título de cada set (capturas del juego) ---- */
+const LORD_STAT={Lionheart:["+5 P.ATT"],Ashura:["+5 P.ATT"],Asura:["+5 P.ATT"],Archangel:["+5 M.ATT"]};
+const TEMPLAR="Rising Twilight Templar (los 9 Lords): P.ATT 125 · M.ATT 125 · P.DEF 250 · M.DEF 250 · Eva 200 · Acc 225";
+function lordNote(prefix,set){const st=LORD_STAT[set]; return st?`<div class="note ok" style="margin:0 0 8px">📊 <b>${prefix}: ${set==="Asura"?"Ashura":set} Lord</b> da ${st[0]}. Cuenta para el set ${TEMPLAR}.</div>`:""}
 /* ---- render ---- */
 function renderRD(){
   const {set,slot}=S.ui;
   $("#setSeg").innerHTML=Object.keys(P).map(s=>`<button type="button" data-set="${s}" aria-pressed="${s===set}">${s} · ${P[s].type}</button>`).join("");
   $("#slotSeg").innerHTML=SLOTS.map(([k,l])=>`<button type="button" data-slot="${k}" aria-pressed="${k===slot}">${l}</button>`).join("");
   $("#scope").value=S.ui.scope;
-  $("#treeBox").innerHTML=`<p style="margin:0 0 6px;color:var(--soft)">Set Rising Dawn: <b style="color:var(--ink)">${esc(P[set].setName)}</b></p>`+buildTree(set,slot);
+  $("#treeBox").innerHTML=`<p style="margin:0 0 6px;color:var(--soft)">Set Rising Dawn: <b style="color:var(--ink)">${esc(P[set].setName)}</b></p>`+lordNote("Rising Dawn",set)+buildTree(set,slot);
   renderSummary();
 }
 
 function render(){
-  const tt=S.ui.mode==="tt";
-  $("#modeSeg").innerHTML=[["rd","Rising Dawn"],["tt","Twilight"]].map(([k,n])=>`<button type="button" data-mode="${k}" aria-pressed="${S.ui.mode===k}">${n}</button>`).join("");
-  $("#rdCtl").style.display=tt?"none":"contents";
+  const md=S.ui.mode, tt=md==="tt", mt=md==="mat";
+  $("#modeSeg").innerHTML=[["rd","Rising Dawn"],["tt","Twilight"],["mat","Materiales"]].map(([k,n])=>`<button type="button" data-mode="${k}" aria-pressed="${md===k}">${n}</button>`).join("");
+  $("#rdCtl").style.display=(tt||mt)?"none":"contents";
   $("#ttCtl").style.display=tt?"contents":"none";
-  tt?renderTT():renderRD();
+  $("#expAll").parentNode.style.display=mt?"none":"flex";
+  mt?renderMat():tt?renderTT():renderRD();
 }
 document.addEventListener("click",e=>{
-  const md=e.target.closest("[data-mode]");if(md){S.ui.mode=md.dataset.mode;save();return render()}
+  const md=e.target.closest("[data-mode]");if(md){S.ui.mode=md.dataset.mode;save();if(location.hash)history.replaceState(null,"",location.pathname+location.search);return render()}
   const ts=e.target.closest("[data-ttset]");if(ts){S.ui.tt.set=ts.dataset.ttset;save();return render()}
   const tp=e.target.closest("[data-ttpiece]");if(tp){S.ui.tt.piece=tp.dataset.ttpiece;save();return render()}
   const tg2=e.target.closest("[data-ttg]");if(tg2){const k=tg2.dataset.ttg;collapsed[k]=!collapsed[k];return render()}
   const a=e.target.closest("[data-set]");if(a){S.ui.set=a.dataset.set;save();return render()}
   const b=e.target.closest("[data-slot]");if(b){S.ui.slot=b.dataset.slot;save();return render()}
   const t=e.target.closest("[data-tg]");if(t){const k=t.dataset.tg;collapsed[k]=!collapsed[k];return render()}
+});
+document.addEventListener("input",e=>{
+  const el=e.target; if(!(el.dataset&&el.dataset.mc)) return;
+  S.ui.mc=S.ui.mc||{f:0,n:0,a:0}; const v=Math.max(0,Math.floor(+el.value)||0); S.ui.mc[el.dataset.mc]=v; save();
+  const o=el.nextElementSibling; if(o) o.innerHTML=mcOut(el.dataset.mc,v);
 });
 document.addEventListener("change",e=>{
   const el=e.target;
@@ -394,7 +534,8 @@ let armed=0;
 $("#resetBtn").addEventListener("click",function(){
   if(!armed){this.textContent="¿Seguro? Pulsa otra vez";armed=setTimeout(()=>{this.textContent="Borrar lo marcado";armed=0},4000);return}
   clearTimeout(armed);armed=0;this.textContent="Borrar lo marcado";S.own={};save();render()});
-function fromHash(){const q=location.hash.match(/^#tt\/(\w+)\/(\w+)$/);if(q&&TT.sets.some(s=>s.id===q[1])&&TT.slots.some(x=>x[0]===q[2])){S.ui.mode="tt";S.ui.tt.set=q[1];S.ui.tt.piece=q[2];return}
+function fromHash(){const mm=location.hash.match(/^#mat\/(\w+)$/);if(mm&&MATS_PAGE.some(x=>x.k===mm[1])){S.ui.mode="mat";S.ui.matFocus=mm[1];return}
+  const q=location.hash.match(/^#tt\/(\w+)\/(\w+)$/);if(q&&TT.sets.some(s=>s.id===q[1])&&TT.slots.some(x=>x[0]===q[2])){S.ui.mode="tt";S.ui.tt.set=q[1];S.ui.tt.piece=q[2];return}
   const m=location.hash.match(/^#(\w+)\/(\w+)$/);if(m&&P[m[1]]&&SLOTS.some(x=>x[0]===m[2])){S.ui.mode="rd";S.ui.set=m[1];S.ui.slot=m[2];S.ui.scope="piece"}}
 fromHash();addEventListener("hashchange",()=>{fromHash();render()});
 applyTheme();render();
