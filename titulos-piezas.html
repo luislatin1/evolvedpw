@@ -132,6 +132,7 @@ footer{border-top:1px solid var(--line);padding:16px 0 40px;color:var(--soft);fo
 
 /* ---- Warsoul: 3 métodos ---- */
 .pc.wide{grid-column:1/-1;flex-wrap:wrap}
+.pc .body .tag{white-space:normal;max-width:100%;overflow-wrap:anywhere}
 .pc.wide>details.asc{flex:1 1 100%;margin-top:2px}
 details.asc{margin-top:8px;border:1px solid var(--jade);border-radius:8px;background:var(--card)}
 details.asc>summary{cursor:pointer;font-weight:700;color:var(--jadeD);padding:8px 10px;font-size:.9rem}
@@ -410,7 +411,7 @@ function pieceHTML(t,p){
   if(p.id) links.push(`<a href="${LINK(p.id)}" target="_blank" rel="noopener">pwdatabase ↗</a>`);
   if(p.mold) links.push(`<a href="${LINK(p.mold.id)}" target="_blank" rel="noopener">${esc(p.mold.n)} ↗</a>${p.mold.conf&&p.mold.conf!=="Alta"?` <span class="tag am">cruce ${esc(p.mold.conf.toLowerCase())}</span>`:""}`);
   if(p.tree) links.push(`<a href="arbol-recetas-rising-dawn.html#${esc(p.tree)}">ver cadena en el árbol →</a>`);
-  return `<div class="pc ${h?"have":""} ${rep?"rep":""} ${(p.asc||(p.craft&&(t.g==="legendary"||p.craft.some(r=>r.sub))))?"wide":""}" data-t="${t.id}" data-k="${p.k}">
+  return `<div class="pc ${h?"have":""} ${rep?"rep":""} ${(p.asc||(p.craft&&p.craft.length))?"wide":""}" data-t="${t.id}" data-k="${p.k}">
     ${icon(p.id||ICON[p.k]||(p.mold&&p.mold.id),p.n)}
     <div class="body"><span class="t">${esc(p.n)}</span>${p.sub?(routeChip(t,p)||`<span class="s">${esc(p.sub)}</span>`):""}
       ${tags?`<div class="tags">${tags}</div>`:""}${craftHTML(p)}${via}${links.length?`<div class="links">${links.join("")}</div>`:""}</div>
